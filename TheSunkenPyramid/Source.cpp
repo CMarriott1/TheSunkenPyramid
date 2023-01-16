@@ -6,6 +6,10 @@ int main()
 {
 	RenderWindow window(VideoMode(512, 640), "The Sunken Pyramid");
 
+	RectangleShape infoRectangle(Vector2f(512.f, 128.f));
+	infoRectangle.setFillColor(Color(128, 128, 128));
+	
+
 	while (window.isOpen())
 	{
 		// Process events
@@ -23,5 +27,9 @@ int main()
 			}
 		}
 
+		window.clear();
+
+		window.draw(infoRectangle);
+		window.display();
 	}
 }
