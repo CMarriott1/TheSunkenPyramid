@@ -11,6 +11,12 @@ void movePointer(std::vector<int>& pointer, std::vector<int> directions, int ind
 		else if (directions[index] == 4) pointer[0] = pointer[0] - 1;
 }
 
+bool validatePointerValue(int pointerValue)
+{
+	if (pointerValue >= 0 && pointerValue < 13) return true;
+	else return false;
+}
+
 int main()
 {
 	//Initialisation
@@ -31,6 +37,7 @@ int main()
 		for(int j = 0; j < directions.size() && directionFound == false; ++j)
 		{
 			movePointer(pointer, directions, j);
+
 			if (layout[pointer[0]][pointer[1]] == 0)
 			{
 				int counter = 0;
@@ -41,6 +48,7 @@ int main()
 				if (counter < 2)
 				{
 					layout[pointer[0]][pointer[1]] = 2;
+					generatedRooms.push_back(pointer);
 					directionFound = true;
 				}
 				else 
@@ -59,6 +67,59 @@ int main()
 	}
 
 	layout[pointer[0]][pointer[1]] = 4;
+	generatedRooms.pop_back();
+
+	for (int i = 0; i < 4 + 1; ++i)
+	{
+		std::random_shuffle(generatedRooms.begin(), generatedRooms.end());
+
+		for (int j = 0; i < generatedRooms.size() && directionFound == false; ++j)
+		{
+			pointer = generatedRooms[j];
+
+			std::random_shuffle(directions.begin(), directions.end());
+
+			for (int k = 0; k < directions.size() && directionFound == false; ++k)
+			{
+				movePointer(pointer, directions, k);
+
+				if (validatePointerValue(pointer[0]) && validatePointerValue(pointer[1]))
+				{
+					if (layout[pointer[0]][pointer[1]] == 0)
+					{
+						int counter = 0;
+						if (validatePointerValue(pointer[1] + 1)) if (layout[pointer[0]][pointer[1] + 1] > 0) ++counter;
+						if (validatePointerValue(pointer[0] + 1)) if (layout[pointer[0] + 1][pointer[1]] > 0) ++counter;
+						if (validatePointerValue(pointer[1] - 1)) if (layout[pointer[0]][pointer[1] - 1] > 0) ++counter;
+						if (validatePointerValue(pointer[0] - 1)) if (layout[pointer[0] - 1][pointer[1]] > 0) ++counter;
+						if (counter < 2)
+						{
+							layout[pointer[0]][pointer[1]] = 2;
+							generatedRooms.push_back(pointer);
+							directionFound = true;
+						}
+						else
+						{
+							movePointer(pointer, directions, 3 - k);
+						}
+					}
+					else
+					{
+						movePointer(pointer, directions, 3 - k);
+					}
+				}
+				else 
+				{
+					movePointer(pointer, directions, 3 - k);
+				}
+			}
+
+		}
+
+		directionFound = false;
+	}
+
+	layout[pointer[0]][pointer[1]] = 3;
 
 	for (int i = 0; i < layout.size(); i++) {
 		for (int j = 0; j < layout[i].size(); j++)
