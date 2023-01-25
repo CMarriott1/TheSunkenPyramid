@@ -27,27 +27,10 @@ struct Object {
 		Vector2f pos = spr.getPosition();
 		const float SPEED = 180.f;
 		velocity = Vector2f(0.f, 0.f);
-		if (Keyboard::isKeyPressed(Keyboard::W))
-		{
-			if (pos.y > (screenSize.y * 0.05f))
-			velocity.y -= SPEED;
-		}
-		if (Keyboard::isKeyPressed(Keyboard::S))
-		{
-			if (pos.y < (screenSize.y * 0.95f))
-			velocity.y += SPEED;
-		}
-
-		if (Keyboard::isKeyPressed(Keyboard::A))
-		{
-			if (pos.x > (screenSize.x * 0.05f))
-			velocity.x -= SPEED;
-		}
-		if (Keyboard::isKeyPressed(Keyboard::D))
-		{
-			if (pos.x < (screenSize.x * 0.95f))
-			velocity.x += SPEED;
-		};
+		if (Keyboard::isKeyPressed(Keyboard::W)) velocity.y -= SPEED;
+		if (Keyboard::isKeyPressed(Keyboard::S)) velocity.y += SPEED;
+		if (Keyboard::isKeyPressed(Keyboard::A)) velocity.x -= SPEED;
+		if (Keyboard::isKeyPressed(Keyboard::D)) velocity.x += SPEED;
 		pos += velocity * elapsedSec;
 		spr.setPosition(pos);
 		/*if (Keyboard::isKeyPressed(Keyboard::Space))
@@ -154,10 +137,18 @@ int main()
 		float elapsed = clock.getElapsedTime().asSeconds();
 		clock.restart();
 
-		for (size_t i = 0; i < objects.size(); ++i) //ship vs asteroid
+		for (size_t i = 0; i < objects.size(); ++i) 
 		{
 			objects[i].Update(window.getSize(), elapsed);	
 		}
+
+		//Player position validation
+		if (objects[0].spr.getPosition().y < 152 && walls[0] == true) objects[0].spr.setPosition(objects[0].spr.getPosition().x, 152.f);
+		if (objects[0].spr.getPosition().x > 487 && walls[1] == true) objects[0].spr.setPosition(487.f, objects[0].spr.getPosition().y);
+		if (objects[0].spr.getPosition().y > 616 && walls[2] == true) objects[0].spr.setPosition(objects[0].spr.getPosition().x, 616.f);
+		if (objects[0].spr.getPosition().x < 24 && walls[3] == true) objects[0].spr.setPosition(24.f, objects[0].spr.getPosition().y);
+
+
 
 		window.draw(infoRectangle);
 
