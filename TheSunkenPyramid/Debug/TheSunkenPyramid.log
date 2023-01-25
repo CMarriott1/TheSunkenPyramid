@@ -1,3 +1,11 @@
-﻿  Source.cpp
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\Source.cpp(103,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+﻿  layout.cpp
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\layout.cpp(24,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\layout.cpp(38,20): warning C4018: '<': signed/unsigned mismatch
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\layout.cpp(77,21): warning C4018: '<': signed/unsigned mismatch
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\layout.cpp(83,22): warning C4018: '<': signed/unsigned mismatch
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\layout.cpp(125,20): warning C4018: '<': signed/unsigned mismatch
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\layout.cpp(126,21): warning C4018: '<': signed/unsigned mismatch
+  main.cpp
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(103,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Generating Code...
   TheSunkenPyramid.vcxproj -> C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\Debug\TheSunkenPyramid.exe

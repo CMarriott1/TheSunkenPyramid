@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstdlib>
 
+
 void movePointer(std::vector<int>& pointer, std::vector<int> directions, int index)
 {
 		if (directions[index] == 1) pointer[1] = pointer[1] + 1;
@@ -17,7 +18,7 @@ bool validatePointerValue(int pointerValue)
 	else return false;
 }
 
-int main()
+std::vector<std::vector<int>> layoutGeneration()
 {
 	//Initialisation
 	srand(time(NULL));
@@ -126,4 +127,6 @@ int main()
 			std::cout << layout[i][j] << " ";
 		std::cout << std::endl;
 	}
+
+	return layout;
 }
