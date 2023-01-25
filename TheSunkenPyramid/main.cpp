@@ -126,10 +126,10 @@ int main()
 	std::vector<std::vector<int>>layout(LG::layoutGeneration());
 	std::vector<int>roomPointer{ 5,5 };
 	std::vector<bool>walls{false, false, false, false};
-	if (layout[roomPointer[0]][roomPointer[1] + 1] == 0) walls[0] = true;
-	if (layout[roomPointer[0] + 1][roomPointer[1]] == 0) walls[1] = true;
-	if (layout[roomPointer[0]][roomPointer[1] - 1] == 0) walls[2] = true;
-	if (layout[roomPointer[0] - 1][roomPointer[1]] == 0) walls[3] = true;
+	if (layout[roomPointer[0] - 1][roomPointer[1]] == 0) walls[0] = true;
+	if (layout[roomPointer[0]][roomPointer[1] + 1] == 0) walls[1] = true;
+	if (layout[roomPointer[0] + 1][roomPointer[1]] == 0) walls[2] = true;
+	if (layout[roomPointer[0]][roomPointer[1] - 1] == 0) walls[3] = true;
 
 	//Start game loop
 	while (window.isOpen())
@@ -160,7 +160,23 @@ int main()
 		}
 
 		window.draw(infoRectangle);
-		window.draw(wall);
+
+		if (walls[0]) {
+			wall.setRotation(0);
+			window.draw(wall);
+		}
+		if (walls[1]) {
+			wall.setRotation(90);
+			window.draw(wall);
+		}
+		if (walls[2]) {
+			wall.setRotation(180);
+			window.draw(wall);
+		}
+		if (walls[3]) {
+			wall.setRotation(270);
+			window.draw(wall);
+		}
 
 		for (size_t i = 0; i < objects.size(); ++i) {
 			objects[i].Render(window);
