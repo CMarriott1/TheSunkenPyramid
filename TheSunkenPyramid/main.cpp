@@ -2,8 +2,7 @@
 
 #include "SFML/Graphics.hpp"
 #include "layout.h"
-
-
+ 
 using namespace sf;
 
 bool LoadTexture(const std::string& file, Texture& tex)
@@ -115,8 +114,22 @@ int main()
 
 	RectangleShape infoRectangle(Vector2f(512.f, 128.f));
 	infoRectangle.setFillColor(Color(128, 128, 128));
+
+	RectangleShape wall(Vector2f(512.f, 8.f));
+	wall.setFillColor(Color(255, 0, 0));
+	wall.setOrigin(256.f, 256.f);
+	wall.setPosition(256.f, 384.f);
+	wall.setRotation(90);
 	
 	Clock clock;
+
+	std::vector<std::vector<int>>layout(LG::layoutGeneration());
+	std::vector<int>roomPointer{ 5,5 };
+	std::vector<bool>walls{false, false, false, false};
+	if (layout[roomPointer[0]][roomPointer[1] + 1] == 0) walls[0] = true;
+	if (layout[roomPointer[0] + 1][roomPointer[1]] == 0) walls[1] = true;
+	if (layout[roomPointer[0]][roomPointer[1] - 1] == 0) walls[2] = true;
+	if (layout[roomPointer[0] - 1][roomPointer[1]] == 0) walls[3] = true;
 
 	//Start game loop
 	while (window.isOpen())
@@ -147,6 +160,7 @@ int main()
 		}
 
 		window.draw(infoRectangle);
+		window.draw(wall);
 
 		for (size_t i = 0; i < objects.size(); ++i) {
 			objects[i].Render(window);
