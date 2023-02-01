@@ -93,6 +93,8 @@ int main()
 
 	srand(time(NULL));
 
+	int floorNumber = 1;
+
 	RenderWindow window(VideoMode(512, 640), "The Sunken Pyramid");
 
 	std::vector<Object>objects;
@@ -187,6 +189,11 @@ int main()
 			if (objects[0].spr.getPosition().x < 286 && objects[0].spr.getPosition().x > 222 && objects[0].spr.getPosition().y > 352 && objects[0].spr.getPosition().y < 416)
 			{
 				std::cout << "Floor clear";
+				objects[0].spr.setPosition(256.f, 384.f);
+				roomPointer = { 5,5 };
+				++floorNumber;
+				layout = LG::layoutGeneration(floorNumber);
+				wallsCheck(layout, roomPointer, walls);
 			}
 		}
 

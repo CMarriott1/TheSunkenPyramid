@@ -8,5 +8,5 @@ namespace LG
 {
 	void movePointer(std::vector<int>& pointer, std::vector<int> directions, int index);
 	bool validatePointerValue(int pointerValue);
-	std::vector<std::vector<int>> layoutGeneration();
+	std::vector<std::vector<int>> layoutGeneration(int floorNumber = 1);
 }

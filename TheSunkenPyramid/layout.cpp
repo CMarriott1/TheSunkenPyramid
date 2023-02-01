@@ -19,7 +19,7 @@ namespace LG
 		else return false;
 	}
 
-	std::vector<std::vector<int>> layoutGeneration()
+	std::vector<std::vector<int>> layoutGeneration(int floorNumber = 1)
 	{
 		//Initialisation
 		srand(time(NULL));
@@ -71,7 +71,7 @@ namespace LG
 		layout[pointer[0]][pointer[1]] = 4;
 		generatedRooms.pop_back();
 
-		for (int i = 0; i < 4 + 1; ++i)
+		for (int i = 0; i < 4 + floorNumber; ++i)
 		{
 			std::random_shuffle(generatedRooms.begin(), generatedRooms.end());
 
