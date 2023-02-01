@@ -26,5 +26,8 @@
     <ClInclude Include="layout.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="constants.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

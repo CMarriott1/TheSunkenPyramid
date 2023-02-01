@@ -2,6 +2,7 @@
 
 #include "SFML/Graphics.hpp"
 #include "layout.h"
+#include "constants.h"
  
 using namespace sf;
 
@@ -69,7 +70,7 @@ struct Object {
 		spr.setTexture(tex);
 		IntRect texR = spr.getTextureRect();
 		spr.setOrigin(texR.width / 2.f, texR.height / 2.f);
-		spr.setPosition(256, 384);
+		spr.setPosition(GC::ScreenCentre.x,GC::ScreenCentre.y);
 		active = true;
 	};
 
@@ -95,7 +96,7 @@ int main()
 
 	int floorNumber = 1;
 
-	RenderWindow window(VideoMode(512, 640), "The Sunken Pyramid");
+	RenderWindow window(VideoMode(GC::WindowSize.x, GC::WindowSize.y), "The Sunken Pyramid");
 
 	std::vector<Object>objects;
 
@@ -110,7 +111,7 @@ int main()
 	LoadTexture("data/stairs.png", stairsTex);
 	Sprite stairs;
 	stairs.setTexture(stairsTex);
-	stairs.setPosition(240, 368);
+	stairs.setPosition(GC::ScreenCentre.x - 16, GC::ScreenCentre.y - 16);
 
 	RectangleShape infoRectangle(Vector2f(512.f, 128.f));
 	infoRectangle.setFillColor(Color(128, 128, 128));
@@ -118,13 +119,13 @@ int main()
 	RectangleShape wall(Vector2f(512.f, 8.f));
 	wall.setFillColor(Color(255, 0, 0));
 	wall.setOrigin(256.f, 256.f);
-	wall.setPosition(256.f, 384.f);
+	wall.setPosition(GC::ScreenCentre.x, GC::ScreenCentre.y);
 	wall.setRotation(90);
 	
 	Clock clock;
 
 	std::vector<std::vector<int>>layout(LG::layoutGeneration());
-	std::vector<int>roomPointer{ 5,5 };
+	std::vector<int>roomPointer{GC::FloorCentre.x, GC::FloorCentre.y};
 	std::vector<bool>walls{false, false, false, false};
 	wallsCheck(layout, roomPointer, walls);
 
@@ -140,7 +141,7 @@ int main()
 
 			if (event.type == Event::TextEntered)
 			{
-				if (event.text.unicode == 27) {
+				if (event.text.unicode == GC::EscapeKey) {
 					window.close();
 				}
 			}
@@ -157,28 +158,28 @@ int main()
 		}
 
 		//Is playing moving into a wall?
-		if (objects[0].spr.getPosition().y < 152 && walls[0] == true) objects[0].spr.setPosition(objects[0].spr.getPosition().x, 152.f);
-		if (objects[0].spr.getPosition().x > 487 && walls[1] == true) objects[0].spr.setPosition(487.f, objects[0].spr.getPosition().y);
-		if (objects[0].spr.getPosition().y > 616 && walls[2] == true) objects[0].spr.setPosition(objects[0].spr.getPosition().x, 616.f);
-		if (objects[0].spr.getPosition().x < 24 && walls[3] == true) objects[0].spr.setPosition(24.f, objects[0].spr.getPosition().y);
+		if (objects[0].spr.getPosition().y < GC::LowerBounds.y + 24 && walls[0] == true) objects[0].spr.setPosition(objects[0].spr.getPosition().x, GC::LowerBounds.y + 24);
+		if (objects[0].spr.getPosition().x > GC::WindowSize.x - 24 && walls[1] == true) objects[0].spr.setPosition(GC::WindowSize.x - 24, objects[0].spr.getPosition().y);
+		if (objects[0].spr.getPosition().y > GC::WindowSize.y - 24 && walls[2] == true) objects[0].spr.setPosition(objects[0].spr.getPosition().x, GC::WindowSize.y - 24);
+		if (objects[0].spr.getPosition().x < GC::LowerBounds.x + 24 && walls[3] == true) objects[0].spr.setPosition(GC::LowerBounds.x + 24, objects[0].spr.getPosition().y);
 		
-		if (objects[0].spr.getPosition().y < 136 && walls[0] == false) {
-			objects[0].spr.setPosition(objects[0].spr.getPosition().x, 616.f);
+		if (objects[0].spr.getPosition().y < GC::LowerBounds.y + 8 && walls[0] == false) {
+			objects[0].spr.setPosition(objects[0].spr.getPosition().x, GC::WindowSize.y - 24);
 			roomPointer[0] -= 1;
 			wallsCheck(layout, roomPointer, walls);
 		}
-		if (objects[0].spr.getPosition().x > 503 && walls[1] == false) {
-			objects[0].spr.setPosition(24.f, objects[0].spr.getPosition().y);
+		if (objects[0].spr.getPosition().x > GC::WindowSize.x - 8 && walls[1] == false) {
+			objects[0].spr.setPosition(GC::LowerBounds.x + 24, objects[0].spr.getPosition().y);
 			roomPointer[1] += 1;
 			wallsCheck(layout, roomPointer, walls);
 		}
-		if (objects[0].spr.getPosition().y > 632 && walls[2] == false) {
-			objects[0].spr.setPosition(objects[0].spr.getPosition().x, 152.f);
+		if (objects[0].spr.getPosition().y > GC::WindowSize.y - 8 && walls[2] == false) {
+			objects[0].spr.setPosition(objects[0].spr.getPosition().x, GC::LowerBounds.y + 24);
 			roomPointer[0] += 1;
 			wallsCheck(layout, roomPointer, walls);
 		}
-		if (objects[0].spr.getPosition().x < 8 && walls[3] == false) {
-			objects[0].spr.setPosition(487.f, objects[0].spr.getPosition().y);
+		if (objects[0].spr.getPosition().x < GC::LowerBounds.x + 8 && walls[3] == false) {
+			objects[0].spr.setPosition(GC::WindowSize.x - 24, objects[0].spr.getPosition().y);
 			roomPointer[1] -= 1;
 			wallsCheck(layout, roomPointer, walls);
 		}
@@ -186,18 +187,16 @@ int main()
 		if (layout[roomPointer[0]][roomPointer[1]] == 4)
 		{
 			window.draw(stairs);
-			if (objects[0].spr.getPosition().x < 286 && objects[0].spr.getPosition().x > 222 && objects[0].spr.getPosition().y > 352 && objects[0].spr.getPosition().y < 416)
+			if (objects[0].spr.getPosition().x < GC::ScreenCentre.x + 32 && objects[0].spr.getPosition().x > GC::ScreenCentre.x - 32 && objects[0].spr.getPosition().y > GC::ScreenCentre.y - 32 && objects[0].spr.getPosition().y < GC::ScreenCentre.y + 32)
 			{
-				std::cout << "Floor clear";
-				objects[0].spr.setPosition(256.f, 384.f);
-				roomPointer = { 5,5 };
+				std::cout << "Floor clear\n";
+				objects[0].spr.setPosition(GC::ScreenCentre.x, GC::ScreenCentre.y);
+				roomPointer = { GC::FloorCentre.x, GC::FloorCentre.y };
 				++floorNumber;
 				layout = LG::layoutGeneration(floorNumber);
 				wallsCheck(layout, roomPointer, walls);
 			}
 		}
-
-		window.draw(infoRectangle);
 
 		if (walls[0]) {
 			wall.setRotation(0);
@@ -219,6 +218,8 @@ int main()
 		for (size_t i = 0; i < objects.size(); ++i) {
 			objects[i].Render(window);
 		}
+
+		window.draw(infoRectangle);
 
 		window.display();
 	}
