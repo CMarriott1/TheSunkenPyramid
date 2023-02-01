@@ -16,6 +16,15 @@ bool LoadTexture(const std::string& file, Texture& tex)
 	return false;
 }
 
+void wallsCheck(std::vector<std::vector<int>>layout, std::vector<int>roomPointer, std::vector<bool>&walls)
+{	
+	walls = { false,false,false,false };
+	if (layout[roomPointer[0] - 1][roomPointer[1]] == 0) walls[0] = true;
+	if (layout[roomPointer[0]][roomPointer[1] + 1] == 0) walls[1] = true;
+	if (layout[roomPointer[0] + 1][roomPointer[1]] == 0) walls[2] = true;
+	if (layout[roomPointer[0]][roomPointer[1] - 1] == 0) walls[3] = true;
+}
+
 struct Object {
 	enum class ObjT { Player, PlayerProjectile, Enemy, EnemyProjectile };
 	ObjT type;
@@ -109,10 +118,7 @@ int main()
 	std::vector<std::vector<int>>layout(LG::layoutGeneration());
 	std::vector<int>roomPointer{ 5,5 };
 	std::vector<bool>walls{false, false, false, false};
-	if (layout[roomPointer[0] - 1][roomPointer[1]] == 0) walls[0] = true;
-	if (layout[roomPointer[0]][roomPointer[1] + 1] == 0) walls[1] = true;
-	if (layout[roomPointer[0] + 1][roomPointer[1]] == 0) walls[2] = true;
-	if (layout[roomPointer[0]][roomPointer[1] - 1] == 0) walls[3] = true;
+	wallsCheck(layout, roomPointer, walls);
 
 	//Start game loop
 	while (window.isOpen())
@@ -142,12 +148,32 @@ int main()
 			objects[i].Update(window.getSize(), elapsed);	
 		}
 
-		//Player position validation
+		//Is playing moving into a wall?
 		if (objects[0].spr.getPosition().y < 152 && walls[0] == true) objects[0].spr.setPosition(objects[0].spr.getPosition().x, 152.f);
 		if (objects[0].spr.getPosition().x > 487 && walls[1] == true) objects[0].spr.setPosition(487.f, objects[0].spr.getPosition().y);
 		if (objects[0].spr.getPosition().y > 616 && walls[2] == true) objects[0].spr.setPosition(objects[0].spr.getPosition().x, 616.f);
 		if (objects[0].spr.getPosition().x < 24 && walls[3] == true) objects[0].spr.setPosition(24.f, objects[0].spr.getPosition().y);
-
+		
+		if (objects[0].spr.getPosition().y < 136 && walls[0] == false) {
+			objects[0].spr.setPosition(objects[0].spr.getPosition().x, 616.f);
+			roomPointer[0] -= 1;
+			wallsCheck(layout, roomPointer, walls);
+		}
+		if (objects[0].spr.getPosition().x > 503 && walls[1] == false) {
+			objects[0].spr.setPosition(24.f, objects[0].spr.getPosition().y);
+			roomPointer[1] += 1;
+			wallsCheck(layout, roomPointer, walls);
+		}
+		if (objects[0].spr.getPosition().y > 632 && walls[2] == false) {
+			objects[0].spr.setPosition(objects[0].spr.getPosition().x, 152.f);
+			roomPointer[0] += 1;
+			wallsCheck(layout, roomPointer, walls);
+		}
+		if (objects[0].spr.getPosition().x < 8 && walls[3] == false) {
+			objects[0].spr.setPosition(487.f, objects[0].spr.getPosition().y);
+			roomPointer[1] -= 1;
+			wallsCheck(layout, roomPointer, walls);
+		}
 
 
 		window.draw(infoRectangle);
