@@ -104,6 +104,12 @@ int main()
 	player.Init(window, playerTex);
 	objects.push_back(player);
 
+	Texture stairsTex;
+	LoadTexture("data/stairs.png", stairsTex);
+	Sprite stairs;
+	stairs.setTexture(stairsTex);
+	stairs.setPosition(240, 368);
+
 	RectangleShape infoRectangle(Vector2f(512.f, 128.f));
 	infoRectangle.setFillColor(Color(128, 128, 128));
 
@@ -175,6 +181,14 @@ int main()
 			wallsCheck(layout, roomPointer, walls);
 		}
 
+		if (layout[roomPointer[0]][roomPointer[1]] == 4)
+		{
+			window.draw(stairs);
+			if (objects[0].spr.getPosition().x < 286 && objects[0].spr.getPosition().x > 222 && objects[0].spr.getPosition().y > 352 && objects[0].spr.getPosition().y < 416)
+			{
+				std::cout << "Floor clear";
+			}
+		}
 
 		window.draw(infoRectangle);
 
