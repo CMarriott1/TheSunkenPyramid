@@ -6,7 +6,7 @@
 
 namespace LG
 {
-	void movePointer(std::vector<int>& pointer, std::vector<int> directions, int index);
-	bool validatePointerValue(int pointerValue);
+	void moveIndex(std::vector<int>& index, std::vector<int> directions, int direction);
+	bool validateIndexValue(int indexValue);
 	std::vector<std::vector<int>> layoutGeneration(int floorNumber = 1);
 }

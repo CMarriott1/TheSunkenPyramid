@@ -5,32 +5,33 @@
 
 namespace LG
 {
-	void movePointer(std::vector<int>& pointer, std::vector<int> directions, int index)
+	void moveIndex(std::vector<int>& index, std::vector<int> directions, int direction)
 	{
-		if (directions[index] == 1) pointer[1] = pointer[1] + 1;
-		else if (directions[index] == 2) pointer[0] = pointer[0] + 1;
-		else if (directions[index] == 3) pointer[1] = pointer[1] - 1;
-		else if (directions[index] == 4) pointer[0] = pointer[0] - 1;
+		if (directions[direction] == 1) index[1] = index[1] + 1;
+		else if (directions[direction] == 2) index[0] = index[0] + 1;
+		else if (directions[direction] == 3) index[1] = index[1] - 1;
+		else if (directions[direction] == 4) index[0] = index[0] - 1;
 	}
 
-	bool validatePointerValue(int pointerValue)
+	bool validateIndexValue(int indexValue)
 	{
-		if (pointerValue >= 0 && pointerValue < 13) return true;
+		if (indexValue >= 0 && indexValue < 13) return true;
 		else return false;
 	}
 
 	std::vector<std::vector<int>> layoutGeneration(int floorNumber = 1)
 	{
 		//Initialisation
+
 		srand(time(NULL));
 		std::vector<std::vector<int>>layout(13, { 0,0,0,0,0,0,0,0,0,0,0,0,0 });
-		layout[5][5] = 1;
-		std::vector<int>pointer{5,5};
+		layout[6][6] = 1;
+		std::vector<int>index{6,6};
 		std::vector<int>directions{ 1,2,3,4 };
 		std::vector<std::vector<int>>generatedRooms;
 		bool directionFound = false;
 
-		//Path to end
+		//Path to exit
 
 		for (int i = 0; i < 5; ++i)
 		{
@@ -38,29 +39,29 @@ namespace LG
 
 			for (int j = 0; j < directions.size() && directionFound == false; ++j)
 			{
-				movePointer(pointer, directions, j);
+				moveIndex(index, directions, j);
 
-				if (layout[pointer[0]][pointer[1]] == 0)
+				if (layout[index[0]][index[1]] == 0)
 				{
 					int counter = 0;
-					if (layout[pointer[0]][pointer[1] + 1] > 0) ++counter;
-					if (layout[pointer[0] + 1][pointer[1]] > 0) ++counter;
-					if (layout[pointer[0]][pointer[1] - 1] > 0) ++counter;
-					if (layout[pointer[0] - 1][pointer[1]] > 0) ++counter;
+					if (layout[index[0]][index[1] + 1] > 0) ++counter;
+					if (layout[index[0] + 1][index[1]] > 0) ++counter;
+					if (layout[index[0]][index[1] - 1] > 0) ++counter;
+					if (layout[index[0] - 1][index[1]] > 0) ++counter;
 					if (counter < 2)
 					{
-						layout[pointer[0]][pointer[1]] = 2;
-						generatedRooms.push_back(pointer);
+						layout[index[0]][index[1]] = 2;
+						generatedRooms.push_back(index);
 						directionFound = true;
 					}
 					else
 					{
-						movePointer(pointer, directions, 3 - j);
+						moveIndex(index, directions, 3 - j);
 					}
 				}
 				else
 				{
-					movePointer(pointer, directions, 3 - j);
+					moveIndex(index, directions, 3 - j);
 				}
 			}
 
@@ -68,51 +69,53 @@ namespace LG
 
 		}
 
-		layout[pointer[0]][pointer[1]] = 4;
+		//Last uncleared room is replaced with the exit room
+		layout[index[0]][index[1]] = 4;
 		generatedRooms.pop_back();
 
+		//Extra rooms, randomly placed next to existing rooms
 		for (int i = 0; i < 4 + floorNumber; ++i)
 		{
 			std::random_shuffle(generatedRooms.begin(), generatedRooms.end());
 
-			for (int j = 0; i < generatedRooms.size() && directionFound == false; ++j)
+			for (int j = 0; j < generatedRooms.size() && directionFound == false; ++j)
 			{
-				pointer = generatedRooms[j];
+				index = generatedRooms[j];
 
 				std::random_shuffle(directions.begin(), directions.end());
 
 				for (int k = 0; k < directions.size() && directionFound == false; ++k)
 				{
-					movePointer(pointer, directions, k);
+					moveIndex(index, directions, k);
 
-					if (validatePointerValue(pointer[0]) && validatePointerValue(pointer[1]))
+					if (validateIndexValue(index[0]) && validateIndexValue(index[1]))
 					{
-						if (layout[pointer[0]][pointer[1]] == 0)
+						if (layout[index[0]][index[1]] == 0)
 						{
 							int counter = 0;
-							if (validatePointerValue(pointer[1] + 1)) if (layout[pointer[0]][pointer[1] + 1] > 0) ++counter;
-							if (validatePointerValue(pointer[0] + 1)) if (layout[pointer[0] + 1][pointer[1]] > 0) ++counter;
-							if (validatePointerValue(pointer[1] - 1)) if (layout[pointer[0]][pointer[1] - 1] > 0) ++counter;
-							if (validatePointerValue(pointer[0] - 1)) if (layout[pointer[0] - 1][pointer[1]] > 0) ++counter;
+							if (validateIndexValue(index[1] + 1)) if (layout[index[0]][index[1] + 1] > 0) ++counter;
+							if (validateIndexValue(index[0] + 1)) if (layout[index[0] + 1][index[1]] > 0) ++counter;
+							if (validateIndexValue(index[1] - 1)) if (layout[index[0]][index[1] - 1] > 0) ++counter;
+							if (validateIndexValue(index[0] - 1)) if (layout[index[0] - 1][index[1]] > 0) ++counter;
 							if (counter < 2)
 							{
-								layout[pointer[0]][pointer[1]] = 2;
-								generatedRooms.push_back(pointer);
+								layout[index[0]][index[1]] = 2;
+								generatedRooms.push_back(index);
 								directionFound = true;
 							}
 							else
 							{
-								movePointer(pointer, directions, 3 - k);
+								moveIndex(index, directions, 3 - k);
 							}
 						}
 						else
 						{
-							movePointer(pointer, directions, 3 - k);
+							moveIndex(index, directions, 3 - k);
 						}
 					}
 					else
 					{
-						movePointer(pointer, directions, 3 - k);
+						moveIndex(index, directions, 3 - k);
 					}
 				}
 
@@ -121,8 +124,10 @@ namespace LG
 			directionFound = false;
 		}
 
-		layout[pointer[0]][pointer[1]] = 3;
+		//Last uncleared room is replaced with the item room
+		layout[index[0]][index[1]] = 3;
 
+		//lil dev cheat ehehe ehehe :)) devious activities down here for me and me only
 		for (int i = 0; i < layout.size(); i++) {
 			for (int j = 0; j < layout[i].size(); j++)
 				std::cout << layout[i][j] << " ";

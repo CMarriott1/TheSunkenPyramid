@@ -49,6 +49,10 @@ struct Object {
 		}*/
 	}
 
+	void UpdatePlayerProjectile() {
+		spr.setPosition(Vector2f(spr.getPosition().x + velocity.x, spr.getPosition().y + velocity.y));
+	}
+
 	void Update(const Vector2u& screenSize, float elapsed) {
 		if (active == true) {
 			spr.setColor(Color(255, 255, 255, 255));
@@ -56,6 +60,9 @@ struct Object {
 			{
 			case ObjT::Player:
 				PlayerControl(screenSize, elapsed);
+				break;
+			case ObjT::PlayerProjectile:
+				UpdatePlayerProjectile();
 				break;
 			}
 		}
@@ -66,7 +73,7 @@ struct Object {
 		window.draw(spr);
 	};
 
-	void InitPlayer(RenderWindow& window, Texture& tex) {
+	void InitPlayer(Texture& tex) {
 		spr.setTexture(tex);
 		IntRect texR = spr.getTextureRect();
 		spr.setOrigin(texR.width / 2.f, texR.height / 2.f);
@@ -74,16 +81,29 @@ struct Object {
 		active = true;
 	};
 
+	void InitPlayerProjectile(RenderWindow& window, Texture& tex) {
+		spr.setTexture(tex);
+		IntRect texR = spr.getTextureRect();
+		spr.setOrigin(texR.width / 2.f, texR.height / 2.f);
+	}
+
 	void Init(RenderWindow& window, Texture& tex)
 	{
 		switch (type)
 		{
 		case ObjT::Player:
-			InitPlayer(window, tex);
+			InitPlayer(tex);
+			break;
+		case ObjT::PlayerProjectile:
+			InitPlayerProjectile(window, tex);
 			break;
 		default:
 			assert(false);
 		}
+	}
+
+	void activatePlayerProjectile(Vector2i position, Vector2i velocity) {
+
 	}
 };
 
@@ -91,6 +111,7 @@ struct Object {
 
 int main()
 {
+	//Initialisation
 
 	srand(time(NULL));
 
@@ -99,13 +120,20 @@ int main()
 	RenderWindow window(VideoMode(GC::WindowSize.x, GC::WindowSize.y), "The Sunken Pyramid");
 
 	std::vector<Object>objects;
-
+	
 	Texture playerTex;
 	LoadTexture("data/player.png", playerTex);
 	Object player;
 	player.type = Object::ObjT::Player;
 	player.Init(window, playerTex);
 	objects.push_back(player);
+
+	Texture playerProjectileTex;
+	LoadTexture("data/playerProjectile.png", playerProjectileTex);
+	Object playerProjectile;
+	playerProjectile.type = Object::ObjT::PlayerProjectile;
+	objects.insert(objects.end(), 3, playerProjectile);
+	
 
 	Texture stairsTex;
 	LoadTexture("data/stairs.png", stairsTex);
@@ -116,12 +144,19 @@ int main()
 	RectangleShape infoRectangle(Vector2f(512.f, 128.f));
 	infoRectangle.setFillColor(Color(128, 128, 128));
 
-	RectangleShape wall(Vector2f(512.f, 8.f));
-	wall.setFillColor(Color(255, 0, 0));
-	wall.setOrigin(256.f, 256.f);
+	RectangleShape wallbase(Vector2f(496.f, 496.f));
+	wallbase.setOutlineColor(Color(255, 0, 0));
+	wallbase.setOutlineThickness(8);
+	wallbase.setFillColor(Color::Transparent);
+	wallbase.setOrigin(248.f, 248.f);
+	wallbase.setPosition(GC::ScreenCentre.x, GC::ScreenCentre.y);
+	
+	RectangleShape wall(Vector2f(128.f, 8.f));
+	wall.setFillColor(Color(0, 0, 0));
+	wall.setOrigin(64.f, 256.f);
 	wall.setPosition(GC::ScreenCentre.x, GC::ScreenCentre.y);
 	wall.setRotation(90);
-	
+
 	Clock clock;
 
 	std::vector<std::vector<int>>layout(LG::layoutGeneration());
@@ -163,6 +198,7 @@ int main()
 		if (objects[0].spr.getPosition().y > GC::WindowSize.y - 24 && walls[2] == true) objects[0].spr.setPosition(objects[0].spr.getPosition().x, GC::WindowSize.y - 24);
 		if (objects[0].spr.getPosition().x < GC::LowerBounds.x + 24 && walls[3] == true) objects[0].spr.setPosition(GC::LowerBounds.x + 24, objects[0].spr.getPosition().y);
 		
+		//Is player moving into an exit?
 		if (objects[0].spr.getPosition().y < GC::LowerBounds.y + 8 && walls[0] == false) {
 			objects[0].spr.setPosition(objects[0].spr.getPosition().x, GC::WindowSize.y - 24);
 			roomPointer[0] -= 1;
@@ -184,6 +220,7 @@ int main()
 			wallsCheck(layout, roomPointer, walls);
 		}
 
+		//Room types
 		if (layout[roomPointer[0]][roomPointer[1]] == 4)
 		{
 			window.draw(stairs);
@@ -198,19 +235,22 @@ int main()
 			}
 		}
 
-		if (walls[0]) {
+		//Rendering
+
+		window.draw(wallbase);
+		if (!walls[0]) {
 			wall.setRotation(0);
 			window.draw(wall);
 		}
-		if (walls[1]) {
+		if (!walls[1]) {
 			wall.setRotation(90);
 			window.draw(wall);
 		}
-		if (walls[2]) {
+		if (!walls[2]) {
 			wall.setRotation(180);
 			window.draw(wall);
 		}
-		if (walls[3]) {
+		if (!walls[3]) {
 			wall.setRotation(270);
 			window.draw(wall);
 		}
@@ -221,6 +261,7 @@ int main()
 
 		window.draw(infoRectangle);
 
+		//The thing that matters
 		window.display();
 	}
 };

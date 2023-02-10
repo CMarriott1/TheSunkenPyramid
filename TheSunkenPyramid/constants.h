@@ -8,7 +8,7 @@ struct Dim2Di
 namespace GC
 {
 	const Dim2Di ScreenCentre{ 256,384 };
-	const Dim2Di FloorCentre{ 5,5 };
+	const Dim2Di FloorCentre{ 6,6 };
 	const Dim2Di WindowSize{512, 640};
 	const Dim2Di LowerBounds{ 0,128 };
 
