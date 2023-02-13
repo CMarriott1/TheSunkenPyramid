@@ -11,6 +11,4 @@ namespace GC
 	const Dim2Di FloorCentre{ 6,6 };
 	const Dim2Di WindowSize{512, 640};
 	const Dim2Di LowerBounds{ 0,128 };
-
-	const char EscapeKey(27);
 }

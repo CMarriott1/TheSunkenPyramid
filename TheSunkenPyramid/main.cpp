@@ -3,6 +3,9 @@
 #include "SFML/Graphics.hpp"
 #include "layout.h"
 #include "constants.h"
+#include "player.h"
+
+
  
 using namespace sf;
 
@@ -26,12 +29,14 @@ void wallsCheck(std::vector<std::vector<int>>layout, std::vector<int>roomPointer
 	if (layout[roomPointer[0]][roomPointer[1] - 1] == 0) walls[3] = true;
 }
 
-struct Object {
+class Object {
+public:
 	enum class ObjT { Player, PlayerProjectile, Enemy, EnemyProjectile };
 	ObjT type;
 	Sprite spr;
 	bool active = false;
 	Vector2f velocity = Vector2f(0.f, 0.f);
+	float cooldown = 0.f;
 
 	void PlayerControl(const Vector2u& screenSize, float elapsedSec) {
 		Vector2f pos = spr.getPosition();
@@ -41,12 +46,13 @@ struct Object {
 		if (Keyboard::isKeyPressed(Keyboard::S)) velocity.y += SPEED;
 		if (Keyboard::isKeyPressed(Keyboard::A)) velocity.x -= SPEED;
 		if (Keyboard::isKeyPressed(Keyboard::D)) velocity.x += SPEED;
+
+		/*if (cooldown <= 0)
+		{
+			if(Keyboard::isKeyPressed(Keyboard::)
+		}*/
 		pos += velocity * elapsedSec;
 		spr.setPosition(pos);
-		/*if (Keyboard::isKeyPressed(Keyboard::Space))
-		{
-			
-		}*/
 	}
 
 	void UpdatePlayerProjectile() {
@@ -119,6 +125,8 @@ int main()
 
 	RenderWindow window(VideoMode(GC::WindowSize.x, GC::WindowSize.y), "The Sunken Pyramid");
 
+	window.setKeyRepeatEnabled(false);
+
 	std::vector<Object>objects;
 	
 	Texture playerTex;
@@ -164,19 +172,20 @@ int main()
 	std::vector<bool>walls{false, false, false, false};
 	wallsCheck(layout, roomPointer, walls);
 
+	Event event;
+
 	//Start game loop
 	while (window.isOpen())
 	{
 		// Process events
-		Event event;
 		while (window.pollEvent(event))
 		{
 			// Close window: exit
 			if (event.type == Event::Closed) window.close();
 
-			if (event.type == Event::TextEntered)
+			if (event.type == Event::KeyPressed)
 			{
-				if (event.text.unicode == GC::EscapeKey) {
+				if (event.key.code == Keyboard::Escape) {
 					window.close();
 				}
 			}
