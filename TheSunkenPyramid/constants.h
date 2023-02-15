@@ -17,6 +17,8 @@ namespace GC
 	const float PlayerSpeed = 180.f;
 	const float PlayerProjectileSpeed = 270.f;
 
+	const float PlayerFiringSpeed = 0.75f;
+
 	//Misc
 	const int PlayerRadius = 16;
 	const Dim2Di ScreenCentre{ 256,384 };

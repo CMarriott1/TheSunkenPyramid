@@ -15,7 +15,7 @@ void PlayerProjectile::update(const sf::Vector2u& screenSize, float elapsedSec) 
 		sf::Vector2f pos = spr.getPosition();
 		pos += velocity * elapsedSec;
 		spr.setPosition(pos);
-		if (spr.getPosition().x < 0 || spr.getPosition().x > 512 || spr.getPosition().y < 128 || spr.getPosition().x > 640)
+		if (spr.getPosition().x < 0 || spr.getPosition().x > 512 || spr.getPosition().y < 128 || spr.getPosition().y > 640)
 		{
 			active = false;
 		}
@@ -25,19 +25,19 @@ void PlayerProjectile::update(const sf::Vector2u& screenSize, float elapsedSec) 
 void PlayerProjectile::activate(int direction, sf::Vector2f playerPosition) {
 	if (direction == GC::Up) {
 		velocity = sf::Vector2f(0.f, -GC::PlayerProjectileSpeed);
-		spr.setPosition(playerPosition.x, playerPosition.y);
+		spr.setPosition(playerPosition.x, playerPosition.y - GC::PlayerRadius);
 	}
 	else if (direction == GC::Right) {
 		velocity = sf::Vector2f(GC::PlayerProjectileSpeed, 0.f);
-		spr.setPosition(playerPosition.x, playerPosition.y);
+		spr.setPosition(playerPosition.x + GC::PlayerRadius, playerPosition.y);
 	}
 	else if (direction == GC::Down) {
 		velocity = sf::Vector2f(0.f, GC::PlayerProjectileSpeed);
-		spr.setPosition(playerPosition.x, playerPosition.y);
+		spr.setPosition(playerPosition.x, playerPosition.y + GC::PlayerRadius);
 	}
 	else if (direction == GC::Left) {
 		velocity = sf::Vector2f(-GC::PlayerProjectileSpeed, 0.f);
-		spr.setPosition(playerPosition.x, playerPosition.y);
+		spr.setPosition(playerPosition.x - GC::PlayerRadius, playerPosition.y);
 	}
 	active = true;
 }

@@ -123,7 +123,7 @@ int main()
 					if (playerProjectiles[i].active == false)
 					{
 						playerProjectiles[i].activate(player.fireDirection, player.spr.getPosition());
-						firetimer = 1; //1 second
+						firetimer = GC::PlayerFiringSpeed; 
 						break;
 					}
 				}
