@@ -19,13 +19,23 @@ bool LoadTexture(const std::string& file, Texture& tex)
 	return false;
 }
 
-void wallsCheck(std::vector<std::vector<int>>layout, std::vector<int>roomPointer, std::vector<bool>&walls)
+void wallsCheck(std::vector<std::vector<int>>&layout, std::vector<int>&roomPointer, std::vector<bool>&walls)
 {	
 	walls = { false,false,false,false };
 	if (layout[roomPointer[0] - 1][roomPointer[1]] == 0) walls[0] = true;
 	if (layout[roomPointer[0]][roomPointer[1] + 1] == 0) walls[1] = true;
 	if (layout[roomPointer[0] + 1][roomPointer[1]] == 0) walls[2] = true;
 	if (layout[roomPointer[0]][roomPointer[1] - 1] == 0) walls[3] = true;
+}
+
+void newRoom(std::vector<std::vector<int>>& layout, std::vector<int>& roomPointer, std::vector<bool>& walls, std::vector<PlayerProjectile>&projectiles)
+{
+	wallsCheck(layout, roomPointer, walls);
+	for (size_t i = 0; i < projectiles.size(); ++i)
+	{
+		projectiles[i].active = false;
+	}
+	
 }
 
 int main()
@@ -142,22 +152,22 @@ int main()
 		if (player.spr.getPosition().y < GC::LowerBounds.y + 8 && walls[0] == false) {
 			player.spr.setPosition(player.spr.getPosition().x, GC::WindowSize.y - 24);
 			roomPointer[0] -= 1;
-			wallsCheck(layout, roomPointer, walls);
+			newRoom(layout, roomPointer, walls, playerProjectiles);
 		}
 		if (player.spr.getPosition().x > GC::WindowSize.x - 8 && walls[1] == false) {
 			player.spr.setPosition(GC::LowerBounds.x + 24, player.spr.getPosition().y);
 			roomPointer[1] += 1;
-			wallsCheck(layout, roomPointer, walls);
+			newRoom(layout, roomPointer, walls, playerProjectiles);
 		}
 		if (player.spr.getPosition().y > GC::WindowSize.y - 8 && walls[2] == false) {
 			player.spr.setPosition(player.spr.getPosition().x, GC::LowerBounds.y + 24);
 			roomPointer[0] += 1;
-			wallsCheck(layout, roomPointer, walls);
+			newRoom(layout, roomPointer, walls, playerProjectiles);
 		}
 		if (player.spr.getPosition().x < GC::LowerBounds.x + 8 && walls[3] == false) {
 			player.spr.setPosition(GC::WindowSize.x - 24, player.spr.getPosition().y);
 			roomPointer[1] -= 1;
-			wallsCheck(layout, roomPointer, walls);
+			newRoom(layout, roomPointer, walls, playerProjectiles);
 		}
 
 		
