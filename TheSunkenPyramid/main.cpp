@@ -1,8 +1,7 @@
-#include <assert.h>
-
 #include "SFML/Graphics.hpp"
 #include "layout.h"
 #include "constants.h"
+#include <assert.h>
 #include "player.h"
 
 
@@ -29,92 +28,6 @@ void wallsCheck(std::vector<std::vector<int>>layout, std::vector<int>roomPointer
 	if (layout[roomPointer[0]][roomPointer[1] - 1] == 0) walls[3] = true;
 }
 
-class Object {
-public:
-	enum class ObjT { Player, PlayerProjectile, Enemy, EnemyProjectile };
-	ObjT type;
-	Sprite spr;
-	bool active = false;
-	Vector2f velocity = Vector2f(0.f, 0.f);
-	float cooldown = 0.f;
-
-	void PlayerControl(const Vector2u& screenSize, float elapsedSec) {
-		Vector2f pos = spr.getPosition();
-		const float SPEED = 180.f;
-		velocity = Vector2f(0.f, 0.f);
-		if (Keyboard::isKeyPressed(Keyboard::W)) velocity.y -= SPEED;
-		if (Keyboard::isKeyPressed(Keyboard::S)) velocity.y += SPEED;
-		if (Keyboard::isKeyPressed(Keyboard::A)) velocity.x -= SPEED;
-		if (Keyboard::isKeyPressed(Keyboard::D)) velocity.x += SPEED;
-
-		/*if (cooldown <= 0)
-		{
-			if(Keyboard::isKeyPressed(Keyboard::)
-		}*/
-		pos += velocity * elapsedSec;
-		spr.setPosition(pos);
-	}
-
-	void UpdatePlayerProjectile() {
-		spr.setPosition(Vector2f(spr.getPosition().x + velocity.x, spr.getPosition().y + velocity.y));
-	}
-
-	void Update(const Vector2u& screenSize, float elapsed) {
-		if (active == true) {
-			spr.setColor(Color(255, 255, 255, 255));
-			switch (type)
-			{
-			case ObjT::Player:
-				PlayerControl(screenSize, elapsed);
-				break;
-			case ObjT::PlayerProjectile:
-				UpdatePlayerProjectile();
-				break;
-			}
-		}
-		else spr.setColor(Color(0, 0, 0, 0));
-	}
-
-	void Render(RenderWindow& window) {
-		window.draw(spr);
-	};
-
-	void InitPlayer(Texture& tex) {
-		spr.setTexture(tex);
-		IntRect texR = spr.getTextureRect();
-		spr.setOrigin(texR.width / 2.f, texR.height / 2.f);
-		spr.setPosition(GC::ScreenCentre.x,GC::ScreenCentre.y);
-		active = true;
-	};
-
-	void InitPlayerProjectile(RenderWindow& window, Texture& tex) {
-		spr.setTexture(tex);
-		IntRect texR = spr.getTextureRect();
-		spr.setOrigin(texR.width / 2.f, texR.height / 2.f);
-	}
-
-	void Init(RenderWindow& window, Texture& tex)
-	{
-		switch (type)
-		{
-		case ObjT::Player:
-			InitPlayer(tex);
-			break;
-		case ObjT::PlayerProjectile:
-			InitPlayerProjectile(window, tex);
-			break;
-		default:
-			assert(false);
-		}
-	}
-
-	void activatePlayerProjectile(Vector2i position, Vector2i velocity) {
-
-	}
-};
-
-
-
 int main()
 {
 	//Initialisation
@@ -126,21 +39,17 @@ int main()
 	RenderWindow window(VideoMode(GC::WindowSize.x, GC::WindowSize.y), "The Sunken Pyramid");
 
 	window.setKeyRepeatEnabled(false);
-
-	std::vector<Object>objects;
 	
 	Texture playerTex;
 	LoadTexture("data/player.png", playerTex);
-	Object player;
-	player.type = Object::ObjT::Player;
-	player.Init(window, playerTex);
-	objects.push_back(player);
+	Player player;
+	player.init(playerTex);
 
-	Texture playerProjectileTex;
+	/*Texture playerProjectileTex;
 	LoadTexture("data/playerProjectile.png", playerProjectileTex);
 	Object playerProjectile;
 	playerProjectile.type = Object::ObjT::PlayerProjectile;
-	objects.insert(objects.end(), 3, playerProjectile);
+	objects.insert(objects.end(), 3, playerProjectile);*/
 	
 
 	Texture stairsTex;
@@ -196,35 +105,37 @@ int main()
 		float elapsed = clock.getElapsedTime().asSeconds();
 		clock.restart();
 
-		for (size_t i = 0; i < objects.size(); ++i) 
+		/*for (size_t i = 0; i < objects.size(); ++i) 
 		{
 			objects[i].Update(window.getSize(), elapsed);	
-		}
+		}*/
+
+		player.update(window.getSize(), elapsed);
 
 		//Is playing moving into a wall?
-		if (objects[0].spr.getPosition().y < GC::LowerBounds.y + 24 && walls[0] == true) objects[0].spr.setPosition(objects[0].spr.getPosition().x, GC::LowerBounds.y + 24);
-		if (objects[0].spr.getPosition().x > GC::WindowSize.x - 24 && walls[1] == true) objects[0].spr.setPosition(GC::WindowSize.x - 24, objects[0].spr.getPosition().y);
-		if (objects[0].spr.getPosition().y > GC::WindowSize.y - 24 && walls[2] == true) objects[0].spr.setPosition(objects[0].spr.getPosition().x, GC::WindowSize.y - 24);
-		if (objects[0].spr.getPosition().x < GC::LowerBounds.x + 24 && walls[3] == true) objects[0].spr.setPosition(GC::LowerBounds.x + 24, objects[0].spr.getPosition().y);
+		if (player.spr.getPosition().y < GC::LowerBounds.y + 24 && walls[0] == true) player.spr.setPosition(player.spr.getPosition().x, GC::LowerBounds.y + 24);
+		if (player.spr.getPosition().x > GC::WindowSize.x - 24 && walls[1] == true) player.spr.setPosition(GC::WindowSize.x - 24, player.spr.getPosition().y);
+		if (player.spr.getPosition().y > GC::WindowSize.y - 24 && walls[2] == true) player.spr.setPosition(player.spr.getPosition().x, GC::WindowSize.y - 24);
+		if (player.spr.getPosition().x < GC::LowerBounds.x + 24 && walls[3] == true) player.spr.setPosition(GC::LowerBounds.x + 24, player.spr.getPosition().y);
 		
 		//Is player moving into an exit?
-		if (objects[0].spr.getPosition().y < GC::LowerBounds.y + 8 && walls[0] == false) {
-			objects[0].spr.setPosition(objects[0].spr.getPosition().x, GC::WindowSize.y - 24);
+		if (player.spr.getPosition().y < GC::LowerBounds.y + 8 && walls[0] == false) {
+			player.spr.setPosition(player.spr.getPosition().x, GC::WindowSize.y - 24);
 			roomPointer[0] -= 1;
 			wallsCheck(layout, roomPointer, walls);
 		}
-		if (objects[0].spr.getPosition().x > GC::WindowSize.x - 8 && walls[1] == false) {
-			objects[0].spr.setPosition(GC::LowerBounds.x + 24, objects[0].spr.getPosition().y);
+		if (player.spr.getPosition().x > GC::WindowSize.x - 8 && walls[1] == false) {
+			player.spr.setPosition(GC::LowerBounds.x + 24, player.spr.getPosition().y);
 			roomPointer[1] += 1;
 			wallsCheck(layout, roomPointer, walls);
 		}
-		if (objects[0].spr.getPosition().y > GC::WindowSize.y - 8 && walls[2] == false) {
-			objects[0].spr.setPosition(objects[0].spr.getPosition().x, GC::LowerBounds.y + 24);
+		if (player.spr.getPosition().y > GC::WindowSize.y - 8 && walls[2] == false) {
+			player.spr.setPosition(player.spr.getPosition().x, GC::LowerBounds.y + 24);
 			roomPointer[0] += 1;
 			wallsCheck(layout, roomPointer, walls);
 		}
-		if (objects[0].spr.getPosition().x < GC::LowerBounds.x + 8 && walls[3] == false) {
-			objects[0].spr.setPosition(GC::WindowSize.x - 24, objects[0].spr.getPosition().y);
+		if (player.spr.getPosition().x < GC::LowerBounds.x + 8 && walls[3] == false) {
+			player.spr.setPosition(GC::WindowSize.x - 24, player.spr.getPosition().y);
 			roomPointer[1] -= 1;
 			wallsCheck(layout, roomPointer, walls);
 		}
@@ -233,10 +144,10 @@ int main()
 		if (layout[roomPointer[0]][roomPointer[1]] == 4)
 		{
 			window.draw(stairs);
-			if (objects[0].spr.getPosition().x < GC::ScreenCentre.x + 32 && objects[0].spr.getPosition().x > GC::ScreenCentre.x - 32 && objects[0].spr.getPosition().y > GC::ScreenCentre.y - 32 && objects[0].spr.getPosition().y < GC::ScreenCentre.y + 32)
+			if (player.spr.getPosition().x < GC::ScreenCentre.x + 32 && player.spr.getPosition().x > GC::ScreenCentre.x - 32 && player.spr.getPosition().y > GC::ScreenCentre.y - 32 && player.spr.getPosition().y < GC::ScreenCentre.y + 32)
 			{
 				std::cout << "Floor clear\n";
-				objects[0].spr.setPosition(GC::ScreenCentre.x, GC::ScreenCentre.y);
+				player.spr.setPosition(GC::ScreenCentre.x, GC::ScreenCentre.y);
 				roomPointer = { GC::FloorCentre.x, GC::FloorCentre.y };
 				++floorNumber;
 				layout = LG::layoutGeneration(floorNumber);
@@ -264,10 +175,10 @@ int main()
 			window.draw(wall);
 		}
 
-		for (size_t i = 0; i < objects.size(); ++i) {
+		/*for (size_t i = 0; i < objects.size(); ++i) {
 			objects[i].Render(window);
-		}
-
+		}*/
+		window.draw(player.spr);
 		window.draw(infoRectangle);
 
 		//The thing that matters

@@ -1,13 +1,11 @@
+#include "player.h"
 #include "SFML/Graphics.hpp"
 #include "constants.h"
 
-struct Player {
-	sf::Sprite spr;
-	bool active = false;
-	sf::Vector2f velocity = sf::Vector2f(0.f, 0.f);
-	float cooldown = 0.f;
 
-	void update(const sf::Vector2u& screenSize, float elapsedSec) {
+	
+
+	void Player::update(const sf::Vector2u& screenSize, float elapsedSec) {
 		sf::Vector2f pos = spr.getPosition();
 		const float SPEED = 180.f;
 		velocity = sf::Vector2f(0.f, 0.f);
@@ -24,11 +22,13 @@ struct Player {
 		spr.setPosition(pos);
 	}
 
-	void init(sf::Texture& tex) {
+	void Player::init(sf::Texture& tex) {
+		active = false;
+		velocity = sf::Vector2f(0.f, 0.f);
+		cooldown = 0.f;
 		spr.setTexture(tex);
 		sf::IntRect texR = spr.getTextureRect();
 		spr.setOrigin(texR.width / 2.f, texR.height / 2.f);
 		spr.setPosition(GC::ScreenCentre.x, GC::ScreenCentre.y);
 		active = true;
 	};
-};
