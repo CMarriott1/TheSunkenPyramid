@@ -3,7 +3,7 @@
 #include "constants.h"
 #include <assert.h>
 #include "player.h"
-
+#include "playerprojectile.h"
 
  
 using namespace sf;
@@ -45,12 +45,12 @@ int main()
 	Player player;
 	player.init(playerTex);
 
-	/*Texture playerProjectileTex;
+	Texture playerProjectileTex;
 	LoadTexture("data/playerProjectile.png", playerProjectileTex);
-	Object playerProjectile;
-	playerProjectile.type = Object::ObjT::PlayerProjectile;
-	objects.insert(objects.end(), 3, playerProjectile);*/
-	
+	PlayerProjectile playerProjectile;
+	playerProjectile.init(playerProjectileTex);
+	std::vector<PlayerProjectile>playerProjectiles;
+	playerProjectiles.insert(playerProjectiles.begin(), 3, playerProjectile);
 
 	Texture stairsTex;
 	LoadTexture("data/stairs.png", stairsTex);
@@ -83,6 +83,8 @@ int main()
 
 	Event event;
 
+	float firetimer = 0;
+
 	//Start game loop
 	while (window.isOpen())
 	{
@@ -105,12 +107,30 @@ int main()
 		float elapsed = clock.getElapsedTime().asSeconds();
 		clock.restart();
 
-		/*for (size_t i = 0; i < objects.size(); ++i) 
+		for (size_t i = 0; i < playerProjectiles.size(); ++i) 
 		{
-			objects[i].Update(window.getSize(), elapsed);	
-		}*/
+			playerProjectiles[i].update(window.getSize(), elapsed);	
+		}
 
+		firetimer -= elapsed;
 		player.update(window.getSize(), elapsed);
+		if (firetimer <= 0)
+		{
+			if (player.fireDirection != -1)
+			{
+				for (int i = 0; i < playerProjectiles.size(); ++i)
+				{
+					if (playerProjectiles[i].active == false)
+					{
+						playerProjectiles[i].activate(player.fireDirection, player.spr.getPosition());
+						firetimer = 1; //1 second
+						break;
+					}
+				}
+				//std::cout << "yep";
+			}
+		}
+		//std::cout << firetimer << " " << player.fireDirection << "\n";
 
 		//Is playing moving into a wall?
 		if (player.spr.getPosition().y < GC::LowerBounds.y + 24 && walls[0] == true) player.spr.setPosition(player.spr.getPosition().x, GC::LowerBounds.y + 24);
@@ -140,6 +160,7 @@ int main()
 			wallsCheck(layout, roomPointer, walls);
 		}
 
+		
 		//Room types
 		if (layout[roomPointer[0]][roomPointer[1]] == 4)
 		{
@@ -156,6 +177,11 @@ int main()
 		}
 
 		//Rendering
+		window.draw(player.spr);
+
+		for (size_t i = 0; i < playerProjectiles.size(); ++i) {
+			playerProjectiles[i].render(window);
+		}
 
 		window.draw(wallbase);
 		if (!walls[0]) {
@@ -175,11 +201,8 @@ int main()
 			window.draw(wall);
 		}
 
-		/*for (size_t i = 0; i < objects.size(); ++i) {
-			objects[i].Render(window);
-		}*/
-		window.draw(player.spr);
 		window.draw(infoRectangle);
+
 
 		//The thing that matters
 		window.display();

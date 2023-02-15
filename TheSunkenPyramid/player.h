@@ -7,8 +7,7 @@ struct Player {
 	sf::Sprite spr;
 	bool active;
 	sf::Vector2f velocity;
-	float cooldown;
+	int fireDirection;
 	void update(const sf::Vector2u& screenSize, float elapsedSec);
 	void init(sf::Texture& tex);
-
 };

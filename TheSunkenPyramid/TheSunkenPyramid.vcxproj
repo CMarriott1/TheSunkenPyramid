@@ -133,9 +133,11 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="layout.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="playerprojectile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h" />
+    <ClInclude Include="playerprojectile.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="layout.h" />
   </ItemGroup>
