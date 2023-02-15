@@ -1,0 +1,18 @@
+﻿  main.cpp
+C:\Pseudo-Drive\Uni Documents\code\SFML\t12_ship-main\t09_spriteMove\main.cpp(142,12): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\t12_ship-main\t09_spriteMove\main.cpp(154,17): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\t12_ship-main\t09_spriteMove\main.cpp(169,12): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\t12_ship-main\t09_spriteMove\main.cpp(200,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\t12_ship-main\t09_spriteMove\main.cpp(224,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\t12_ship-main\t09_spriteMove\main.cpp(224,30): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\t12_ship-main\t09_spriteMove\main.cpp(226,20): warning C4018: '<': signed/unsigned mismatch
+C:\Pseudo-Drive\Uni Documents\code\SFML\t12_ship-main\t09_spriteMove\main.cpp(236,35): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\t12_ship-main\t09_spriteMove\main.cpp(236,32): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\t12_ship-main\t09_spriteMove\main.cpp(237,23): warning C4018: '<': signed/unsigned mismatch
+C:\Pseudo-Drive\Uni Documents\code\SFML\t12_ship-main\t09_spriteMove\main.cpp(239,125): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\t12_ship-main\t09_spriteMove\main.cpp(304,104): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\t12_ship-main\t09_spriteMove\main.cpp(321,68): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\t12_ship-main\t09_spriteMove\main.cpp(321,46): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\t12_ship-main\t09_spriteMove\main.cpp(324,104): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\t12_ship-main\t09_spriteMove\main.cpp(354,105): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  t09_spriteMove.vcxproj -> C:\Pseudo-Drive\Uni Documents\code\SFML\t12_ship-main\bin\t09_spriteMove.exe
