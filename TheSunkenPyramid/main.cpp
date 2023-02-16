@@ -30,18 +30,23 @@ void wallsCheck(std::vector<std::vector<int>>&layout, std::vector<int>&roomPoint
 	if (layout[roomPointer[0]][roomPointer[1] - 1] == 0) walls[3] = true;
 }
 
-void newRoom(std::vector<std::vector<int>>& layout, std::vector<int>& roomPointer, std::vector<bool>& walls, std::vector<PlayerProjectile>&projectiles, int playerPosition, int floorNumber, std::vector<Bat>&bats)
+void newRoom(std::vector<std::vector<int>>& layout, std::vector<int>& roomPointer, std::vector<bool>& walls, std::vector<PlayerProjectile>& projectiles, int playerPosition, int floorNumber, std::vector<Bat>& bats)
 {
 	wallsCheck(layout, roomPointer, walls);
 	for (size_t i = 0; i < projectiles.size(); ++i)
 	{
 		projectiles[i].active = false;
 	}
-	for (size_t i = 0; i < floorNumber; ++i)
+
+	const int roomType = layout[roomPointer[0]][roomPointer[1]];
+	if (roomType == 2)
 	{
-		bats[i].activate(playerPosition);
+		for (size_t i = 0; i < floorNumber; ++i)
+		{
+			bats[i].activate(playerPosition);
+		}
+		walls = { true, true, true, true };
 	}
-	
 }
 
 int main()
