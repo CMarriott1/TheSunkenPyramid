@@ -16,11 +16,13 @@ namespace GC
 	//Speeds
 	const float PlayerSpeed = 180.f;
 	const float PlayerProjectileSpeed = 270.f;
-
 	const float PlayerFiringSpeed = 0.75f;
+
+	const float BatSpeed = 120.f;
 
 	//Misc
 	const int PlayerRadius = 16;
+	const int GameSize = 512;
 	const Dim2Di ScreenCentre{ 256,384 };
 	const Dim2Di FloorCentre{ 6,6 };
 	const Dim2Di WindowSize{512, 640};

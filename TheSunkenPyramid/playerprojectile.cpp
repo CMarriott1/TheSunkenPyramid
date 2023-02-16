@@ -9,7 +9,7 @@ void PlayerProjectile::init(sf::Texture& tex) {
 	spr.setOrigin(texR.width / 2.f, texR.height / 2.f);
 };
 
-void PlayerProjectile::update(const sf::Vector2u& screenSize, float elapsedSec) {
+void PlayerProjectile::update(float elapsedSec) {
 	if (active == true)
 	{
 		sf::Vector2f pos = spr.getPosition();
@@ -22,7 +22,7 @@ void PlayerProjectile::update(const sf::Vector2u& screenSize, float elapsedSec) 
 	}
 }
 
-void PlayerProjectile::activate(int direction, sf::Vector2f playerPosition) {
+void PlayerProjectile::activate(int direction, const sf::Vector2f& playerPosition) {
 	if (direction == GC::Up) {
 		velocity = sf::Vector2f(0.f, -GC::PlayerProjectileSpeed);
 		spr.setPosition(playerPosition.x, playerPosition.y - GC::PlayerRadius);

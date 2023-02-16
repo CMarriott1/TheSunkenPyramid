@@ -8,7 +8,7 @@ struct PlayerProjectile {
 	bool active;
 	sf::Vector2f velocity;
 	void init(sf::Texture& tex);
-	void update(const sf::Vector2u& screenSize, float elapsedSec);
-	void activate(int direction, sf::Vector2f playerPosition);
-	void render(sf::RenderWindow&);
+	void update(float elapsedSec);
+	void activate(int direction, const sf::Vector2f& playerPosition);
+	void render(sf::RenderWindow& window);
 };

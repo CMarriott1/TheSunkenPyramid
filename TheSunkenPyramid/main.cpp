@@ -2,8 +2,10 @@
 #include "layout.h"
 #include "constants.h"
 #include <assert.h>
+
 #include "player.h"
 #include "playerprojectile.h"
+#include "bat.h"
 
  
 using namespace sf;
@@ -28,12 +30,16 @@ void wallsCheck(std::vector<std::vector<int>>&layout, std::vector<int>&roomPoint
 	if (layout[roomPointer[0]][roomPointer[1] - 1] == 0) walls[3] = true;
 }
 
-void newRoom(std::vector<std::vector<int>>& layout, std::vector<int>& roomPointer, std::vector<bool>& walls, std::vector<PlayerProjectile>&projectiles)
+void newRoom(std::vector<std::vector<int>>& layout, std::vector<int>& roomPointer, std::vector<bool>& walls, std::vector<PlayerProjectile>&projectiles, int playerPosition, int floorNumber, std::vector<Bat>&bats)
 {
 	wallsCheck(layout, roomPointer, walls);
 	for (size_t i = 0; i < projectiles.size(); ++i)
 	{
 		projectiles[i].active = false;
+	}
+	for (size_t i = 0; i < floorNumber; ++i)
+	{
+		bats[i].activate(playerPosition);
 	}
 	
 }
@@ -61,6 +67,14 @@ int main()
 	playerProjectile.init(playerProjectileTex);
 	std::vector<PlayerProjectile>playerProjectiles;
 	playerProjectiles.insert(playerProjectiles.begin(), 3, playerProjectile);
+
+	Texture batTex;
+	LoadTexture("data/bat.png", batTex);
+	Bat bat;
+	bat.init(batTex);
+	std::vector<Bat>bats;
+	bats.insert(bats.begin(), 4, bat);
+
 
 	Texture stairsTex;
 	LoadTexture("data/stairs.png", stairsTex);
@@ -119,7 +133,7 @@ int main()
 
 		for (size_t i = 0; i < playerProjectiles.size(); ++i) 
 		{
-			playerProjectiles[i].update(window.getSize(), elapsed);	
+			playerProjectiles[i].update(elapsed);	
 		}
 
 		firetimer -= elapsed;
@@ -152,22 +166,22 @@ int main()
 		if (player.spr.getPosition().y < GC::LowerBounds.y + 8 && walls[0] == false) {
 			player.spr.setPosition(player.spr.getPosition().x, GC::WindowSize.y - 24);
 			roomPointer[0] -= 1;
-			newRoom(layout, roomPointer, walls, playerProjectiles);
+			newRoom(layout, roomPointer, walls, playerProjectiles, GC::Down, floorNumber, bats);
 		}
 		if (player.spr.getPosition().x > GC::WindowSize.x - 8 && walls[1] == false) {
 			player.spr.setPosition(GC::LowerBounds.x + 24, player.spr.getPosition().y);
 			roomPointer[1] += 1;
-			newRoom(layout, roomPointer, walls, playerProjectiles);
+			newRoom(layout, roomPointer, walls, playerProjectiles, GC::Left, floorNumber, bats);
 		}
 		if (player.spr.getPosition().y > GC::WindowSize.y - 8 && walls[2] == false) {
 			player.spr.setPosition(player.spr.getPosition().x, GC::LowerBounds.y + 24);
 			roomPointer[0] += 1;
-			newRoom(layout, roomPointer, walls, playerProjectiles);
+			newRoom(layout, roomPointer, walls, playerProjectiles, GC::Up, floorNumber, bats);
 		}
 		if (player.spr.getPosition().x < GC::LowerBounds.x + 8 && walls[3] == false) {
 			player.spr.setPosition(GC::WindowSize.x - 24, player.spr.getPosition().y);
 			roomPointer[1] -= 1;
-			newRoom(layout, roomPointer, walls, playerProjectiles);
+			newRoom(layout, roomPointer, walls, playerProjectiles, GC::Right, floorNumber, bats);
 		}
 
 		
@@ -191,6 +205,9 @@ int main()
 
 		for (size_t i = 0; i < playerProjectiles.size(); ++i) {
 			playerProjectiles[i].render(window);
+		}
+		for (size_t i = 0; i < bats.size(); ++i) {
+			bats[i].render(window);
 		}
 
 		window.draw(wallbase);
