@@ -227,7 +227,10 @@ int main()
 
 
 		//Enemy processing
-	 
+		for (size_t i = 0; i < bats.size(); ++i)
+		{
+			if (bats[i].active) bats[i].update(player.spr.getPosition(), elapsed);
+		}
 		//Room types
 		if (layout[roomPointer[0]][roomPointer[1]] == 4)
 		{

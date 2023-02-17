@@ -2,6 +2,7 @@
 #include "SFML/Graphics.hpp"
 #include "constants.h"
 #include "stdlib.h"
+#include "math.h"
 
 void Bat::init(sf::Texture& tex) {
 	active = false;
@@ -14,10 +15,10 @@ void Bat::update(const sf::Vector2f& playerPosition, float elapsed) {
 	sf::Vector2f pos = spr.getPosition();
 	const float xdiff = pos.x - playerPosition.x;
 	const float ydiff = pos.y - playerPosition.y;
-	const float positionDifference = abs(xdiff) + abs(ydiff);
-	velocity.x = xdiff / positionDifference * GC::BatSpeed;
-	velocity.y = ydiff / positionDifference * GC::BatSpeed;
-	pos += velocity;
+	const float hypot = sqrt((xdiff * xdiff) + (ydiff * ydiff));
+	velocity.x = xdiff/hypot ;
+	velocity.y = ydiff/hypot;
+	pos -= velocity * elapsed * GC::BatSpeed;
 	spr.setPosition(pos);
 }
 
