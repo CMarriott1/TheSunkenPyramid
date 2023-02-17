@@ -20,6 +20,10 @@ namespace GC
 
 	const float BatSpeed = 120.f;
 
+	//Radii (for collisions)
+	const int CharRadius = 16;
+	const int ProjRadius = 2;
+
 	//Misc
 	const int PlayerRadius = 16;
 	const int GameSize = 512;

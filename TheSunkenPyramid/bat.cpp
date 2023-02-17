@@ -8,6 +8,7 @@ void Bat::init(sf::Texture& tex) {
 	spr.setTexture(tex);
 	sf::IntRect texR = spr.getTextureRect();
 	spr.setOrigin(texR.width / 2.f, texR.height / 2.f);
+	health = 3;
 }
 
 void Bat::update(const sf::Vector2f& playerPosition, float elapsed) {
@@ -19,6 +20,15 @@ void Bat::update(const sf::Vector2f& playerPosition, float elapsed) {
 	velocity.y = ydiff / positionDifference * GC::BatSpeed;
 	pos += velocity;
 	spr.setPosition(pos);
+}
+
+int Bat::hurt() {
+	--health;
+	if (health <= 0) {
+		active = false;
+		return 1;
+	}
+	else return 0;
 }
 
 void Bat::activate(int playerPosition) {

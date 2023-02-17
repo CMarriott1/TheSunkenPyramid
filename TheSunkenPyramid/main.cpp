@@ -30,7 +30,7 @@ void wallsCheck(std::vector<std::vector<int>>&layout, std::vector<int>&roomPoint
 	if (layout[roomPointer[0]][roomPointer[1] - 1] == 0) walls[3] = true;
 }
 
-void newRoom(std::vector<std::vector<int>>& layout, std::vector<int>& roomPointer, std::vector<bool>& walls, std::vector<PlayerProjectile>& projectiles, int playerPosition, int floorNumber, std::vector<Bat>& bats)
+void newRoom(std::vector<std::vector<int>>& layout, std::vector<int>& roomPointer, std::vector<bool>& walls, std::vector<PlayerProjectile>& projectiles, int playerPosition, int floorNumber, std::vector<Bat>& bats, int& roomType, int& enemyCounter)
 {
 	wallsCheck(layout, roomPointer, walls);
 	for (size_t i = 0; i < projectiles.size(); ++i)
@@ -38,7 +38,7 @@ void newRoom(std::vector<std::vector<int>>& layout, std::vector<int>& roomPointe
 		projectiles[i].active = false;
 	}
 
-	const int roomType = layout[roomPointer[0]][roomPointer[1]];
+	roomType = layout[roomPointer[0]][roomPointer[1]];
 	if (roomType == 2)
 	{
 		for (size_t i = 0; i < floorNumber; ++i)
@@ -46,7 +46,15 @@ void newRoom(std::vector<std::vector<int>>& layout, std::vector<int>& roomPointe
 			bats[i].activate(playerPosition);
 		}
 		walls = { true, true, true, true };
+		enemyCounter = floorNumber;
 	}
+}
+
+bool collision(const Vector2f& pos1, const Vector2f& pos2, int radii)
+{
+	const float xdiff = pos1.x - pos2.x;
+	const float ydiff = pos1.y - pos2.y;
+	return ((xdiff * xdiff) + (ydiff * ydiff) <= (radii * radii));
 }
 
 int main()
@@ -56,6 +64,8 @@ int main()
 	srand(time(NULL));
 
 	int floorNumber = 1;
+	int roomType = 1;
+	int enemyCounter = 0;
 
 	RenderWindow window(VideoMode(GC::WindowSize.x, GC::WindowSize.y), "The Sunken Pyramid");
 
@@ -136,9 +146,10 @@ int main()
 		float elapsed = clock.getElapsedTime().asSeconds();
 		clock.restart();
 
-		for (size_t i = 0; i < playerProjectiles.size(); ++i) 
+		//Player processing
+		for (size_t i = 0; i < playerProjectiles.size(); ++i)
 		{
-			playerProjectiles[i].update(elapsed);	
+			if (playerProjectiles[i].active) playerProjectiles[i].update(elapsed);
 		}
 
 		firetimer -= elapsed;
@@ -152,44 +163,70 @@ int main()
 					if (playerProjectiles[i].active == false)
 					{
 						playerProjectiles[i].activate(player.fireDirection, player.spr.getPosition());
-						firetimer = GC::PlayerFiringSpeed; 
+						firetimer = GC::PlayerFiringSpeed;
 						break;
 					}
 				}
-				//std::cout << "yep";
 			}
 		}
-		//std::cout << firetimer << " " << player.fireDirection << "\n";
 
 		//Is playing moving into a wall?
 		if (player.spr.getPosition().y < GC::LowerBounds.y + 24 && walls[0] == true) player.spr.setPosition(player.spr.getPosition().x, GC::LowerBounds.y + 24);
 		if (player.spr.getPosition().x > GC::WindowSize.x - 24 && walls[1] == true) player.spr.setPosition(GC::WindowSize.x - 24, player.spr.getPosition().y);
 		if (player.spr.getPosition().y > GC::WindowSize.y - 24 && walls[2] == true) player.spr.setPosition(player.spr.getPosition().x, GC::WindowSize.y - 24);
 		if (player.spr.getPosition().x < GC::LowerBounds.x + 24 && walls[3] == true) player.spr.setPosition(GC::LowerBounds.x + 24, player.spr.getPosition().y);
-		
+
 		//Is player moving into an exit?
 		if (player.spr.getPosition().y < GC::LowerBounds.y + 8 && walls[0] == false) {
 			player.spr.setPosition(player.spr.getPosition().x, GC::WindowSize.y - 24);
 			roomPointer[0] -= 1;
-			newRoom(layout, roomPointer, walls, playerProjectiles, GC::Down, floorNumber, bats);
+			newRoom(layout, roomPointer, walls, playerProjectiles, GC::Down, floorNumber, bats, roomType, enemyCounter);
 		}
 		if (player.spr.getPosition().x > GC::WindowSize.x - 8 && walls[1] == false) {
 			player.spr.setPosition(GC::LowerBounds.x + 24, player.spr.getPosition().y);
 			roomPointer[1] += 1;
-			newRoom(layout, roomPointer, walls, playerProjectiles, GC::Left, floorNumber, bats);
+			newRoom(layout, roomPointer, walls, playerProjectiles, GC::Left, floorNumber, bats, roomType, enemyCounter);
 		}
 		if (player.spr.getPosition().y > GC::WindowSize.y - 8 && walls[2] == false) {
 			player.spr.setPosition(player.spr.getPosition().x, GC::LowerBounds.y + 24);
 			roomPointer[0] += 1;
-			newRoom(layout, roomPointer, walls, playerProjectiles, GC::Up, floorNumber, bats);
+			newRoom(layout, roomPointer, walls, playerProjectiles, GC::Up, floorNumber, bats, roomType, enemyCounter);
 		}
 		if (player.spr.getPosition().x < GC::LowerBounds.x + 8 && walls[3] == false) {
 			player.spr.setPosition(GC::WindowSize.x - 24, player.spr.getPosition().y);
 			roomPointer[1] -= 1;
-			newRoom(layout, roomPointer, walls, playerProjectiles, GC::Right, floorNumber, bats);
+			newRoom(layout, roomPointer, walls, playerProjectiles, GC::Right, floorNumber, bats, roomType, enemyCounter);
 		}
 
-		
+		//Player related collision processing
+		if (roomType == 2)
+		{
+			for (size_t projectile = 0; projectile < playerProjectiles.size(); ++projectile)
+			{
+				if (playerProjectiles[projectile].active)
+				{
+					for (size_t enemy = 0; enemy < bats.size() && playerProjectiles[projectile].active; ++enemy)
+					{
+						if (bats[enemy].active)
+						{
+							if (collision(playerProjectiles[projectile].spr.getPosition(), bats[enemy].spr.getPosition(), GC::ProjRadius + GC::CharRadius))
+							{
+								enemyCounter -= bats[enemy].hurt();
+								playerProjectiles[projectile].active = false;
+							}
+						}
+					}
+				}
+			}
+			if (enemyCounter = 0) {
+				layout[roomPointer[0]][roomPointer[1]] = 1;
+				roomType = 1;
+			}
+		}
+
+
+		//Enemy processing
+	 
 		//Room types
 		if (layout[roomPointer[0]][roomPointer[1]] == 4)
 		{
