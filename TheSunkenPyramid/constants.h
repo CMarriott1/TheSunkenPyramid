@@ -24,9 +24,16 @@ namespace GC
 	const int CharRadius = 16;
 	const int ProjRadius = 2;
 
+
+	//Enemy Spawning
+	const int EnemySpawn = 464; //Gamesize minus 2 walls and character length
+	const int MinSpawnDist = 24; //Wall plus half char sprite (origin is centre)
+	const int EnemySpawnHalf = 216; //Half gamesize - 1 wall and character length. Ironically not half
+
 	//Misc
-	const int PlayerRadius = 16;
+	const int WallSize = 8;
 	const int GameSize = 512;
+
 	const Dim2Di ScreenCentre{ 256,384 };
 	const Dim2Di FloorCentre{ 6,6 };
 	const Dim2Di WindowSize{512, 640};

@@ -33,16 +33,16 @@ int Bat::hurt() {
 void Bat::activate(int playerPosition) {
 	health = 3;
 	if (playerPosition == GC::Up) {
-		spr.setPosition(sf::Vector2f(rand() % GC::GameSize + 1, rand() % (GC::GameSize / 2) + 1 + (GC::GameSize / 2) + GC::LowerBounds.y));
+		spr.setPosition(sf::Vector2f(rand() % (GC::EnemySpawn) + GC::MinSpawnDist , rand() % (GC::EnemySpawnHalf) + (GC::GameSize / 2) + GC::CharRadius + GC::LowerBounds.y));
 	}
 	else if (playerPosition == GC::Right) {
-		spr.setPosition(sf::Vector2f(rand() % (GC::GameSize / 2) + 1, rand() % GC::GameSize + 1 + GC::LowerBounds.y));
+		spr.setPosition(sf::Vector2f(rand() % (GC::EnemySpawnHalf) + GC::MinSpawnDist, rand() % (GC::EnemySpawn) + GC::MinSpawnDist + GC::LowerBounds.y));
 	}
 	else if (playerPosition == GC::Down) {
-		spr.setPosition(sf::Vector2f(rand() % GC::GameSize + 1, rand() % (GC::GameSize / 2) + 1 + GC::LowerBounds.y));
+		spr.setPosition(sf::Vector2f(rand() % (GC::EnemySpawn) + GC::MinSpawnDist, rand() % (GC::EnemySpawnHalf) + GC::MinSpawnDist + GC::LowerBounds.y));
 	}
 	else if (playerPosition == GC::Left) {
-		spr.setPosition(sf::Vector2f(rand() % (GC::GameSize/2) + 1 + (GC::GameSize / 2), rand() % GC::GameSize + 1 + GC::LowerBounds.y));
+		spr.setPosition(sf::Vector2f(rand() % (GC::EnemySpawnHalf) + (GC::GameSize / 2) + (GC::CharRadius), rand() % (GC::EnemySpawn) + GC::MinSpawnDist + GC::LowerBounds.y));
 	}
 	active = true;
 }

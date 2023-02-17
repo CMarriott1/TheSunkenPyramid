@@ -25,19 +25,19 @@ void PlayerProjectile::update(float elapsedSec) {
 void PlayerProjectile::activate(int direction, const sf::Vector2f& playerPosition) {
 	if (direction == GC::Up) {
 		velocity = sf::Vector2f(0.f, -GC::PlayerProjectileSpeed);
-		spr.setPosition(playerPosition.x, playerPosition.y - GC::PlayerRadius);
+		spr.setPosition(playerPosition.x, playerPosition.y - GC::CharRadius);
 	}
 	else if (direction == GC::Right) {
 		velocity = sf::Vector2f(GC::PlayerProjectileSpeed, 0.f);
-		spr.setPosition(playerPosition.x + GC::PlayerRadius, playerPosition.y);
+		spr.setPosition(playerPosition.x + GC::CharRadius, playerPosition.y);
 	}
 	else if (direction == GC::Down) {
 		velocity = sf::Vector2f(0.f, GC::PlayerProjectileSpeed);
-		spr.setPosition(playerPosition.x, playerPosition.y + GC::PlayerRadius);
+		spr.setPosition(playerPosition.x, playerPosition.y + GC::CharRadius);
 	}
 	else if (direction == GC::Left) {
 		velocity = sf::Vector2f(-GC::PlayerProjectileSpeed, 0.f);
-		spr.setPosition(playerPosition.x - GC::PlayerRadius, playerPosition.y);
+		spr.setPosition(playerPosition.x - GC::CharRadius, playerPosition.y);
 	}
 	active = true;
 }
