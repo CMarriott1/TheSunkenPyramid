@@ -6,6 +6,7 @@
 #include "player.h"
 #include "playerprojectile.h"
 #include "bat.h"
+#include "mummy.h"
 
  
 using namespace sf;
@@ -30,7 +31,7 @@ void wallsCheck(std::vector<std::vector<int>>&layout, std::vector<int>&roomPoint
 	if (layout[roomPointer[0]][roomPointer[1] - 1] == 0) walls[3] = true;
 }
 
-void newRoom(std::vector<std::vector<int>>& layout, std::vector<int>& roomPointer, std::vector<bool>& walls, std::vector<PlayerProjectile>& projectiles, int playerPosition, int floorNumber, std::vector<Bat>& bats, int& roomType, int& enemyCounter)
+void newRoom(std::vector<std::vector<int>>& layout, std::vector<int>& roomPointer, std::vector<bool>& walls, std::vector<PlayerProjectile>& projectiles, int playerPosition, int floorNumber, std::vector<Bat>& bats, std::vector<Mummy>& mummies, int& roomType, int& enemyCounter)
 {
 	wallsCheck(layout, roomPointer, walls);
 	for (size_t i = 0; i < projectiles.size(); ++i)
@@ -43,7 +44,8 @@ void newRoom(std::vector<std::vector<int>>& layout, std::vector<int>& roomPointe
 	{
 		for (size_t i = 0; i < floorNumber; ++i)
 		{
-			bats[i].activate(playerPosition);
+			if (rand() % 2 == 1) bats[i].activate(playerPosition);
+			else mummies[i].activate(playerPosition);
 		}
 		walls = { true, true, true, true };
 		enemyCounter = floorNumber;
@@ -90,6 +92,12 @@ int main()
 	std::vector<Bat>bats;
 	bats.insert(bats.begin(), 4, bat);
 
+	Texture mummyTex;
+	LoadTexture("data/mummy.png", mummyTex);
+	Mummy mummy;
+	mummy.init(mummyTex);
+	std::vector<Mummy>mummies;
+	mummies.insert(mummies.begin(), 4, mummy);
 
 	Texture stairsTex;
 	LoadTexture("data/stairs.png", stairsTex);
@@ -180,22 +188,22 @@ int main()
 		if (player.spr.getPosition().y < GC::LowerBounds.y + 8 && walls[0] == false) {
 			player.spr.setPosition(player.spr.getPosition().x, GC::WindowSize.y - 24);
 			roomPointer[0] -= 1;
-			newRoom(layout, roomPointer, walls, playerProjectiles, GC::Down, floorNumber, bats, roomType, enemyCounter);
+			newRoom(layout, roomPointer, walls, playerProjectiles, GC::Down, floorNumber, bats, mummies, roomType, enemyCounter);
 		}
 		if (player.spr.getPosition().x > GC::WindowSize.x - 8 && walls[1] == false) {
 			player.spr.setPosition(GC::LowerBounds.x + 24, player.spr.getPosition().y);
 			roomPointer[1] += 1;
-			newRoom(layout, roomPointer, walls, playerProjectiles, GC::Left, floorNumber, bats, roomType, enemyCounter);
+			newRoom(layout, roomPointer, walls, playerProjectiles, GC::Left, floorNumber, bats, mummies, roomType, enemyCounter);
 		}
 		if (player.spr.getPosition().y > GC::WindowSize.y - 8 && walls[2] == false) {
 			player.spr.setPosition(player.spr.getPosition().x, GC::LowerBounds.y + 24);
 			roomPointer[0] += 1;
-			newRoom(layout, roomPointer, walls, playerProjectiles, GC::Up, floorNumber, bats, roomType, enemyCounter);
+			newRoom(layout, roomPointer, walls, playerProjectiles, GC::Up, floorNumber, bats, mummies, roomType, enemyCounter);
 		}
 		if (player.spr.getPosition().x < GC::LowerBounds.x + 8 && walls[3] == false) {
 			player.spr.setPosition(GC::WindowSize.x - 24, player.spr.getPosition().y);
 			roomPointer[1] -= 1;
-			newRoom(layout, roomPointer, walls, playerProjectiles, GC::Right, floorNumber, bats, roomType, enemyCounter);
+			newRoom(layout, roomPointer, walls, playerProjectiles, GC::Right, floorNumber, bats, mummies, roomType, enemyCounter);
 		}
 
 		//Player related collision processing
@@ -215,6 +223,14 @@ int main()
 								playerProjectiles[projectile].active = false;
 							}
 						}
+						else if (mummies[enemy].active)
+						{
+							if (collision(playerProjectiles[projectile].spr.getPosition(), mummies[enemy].spr.getPosition(), GC::ProjRadius + GC::CharRadius))
+							{
+								enemyCounter -= mummies[enemy].hurt();
+								playerProjectiles[projectile].active = false;
+							}
+						}
 					}
 				}
 			}
@@ -230,6 +246,10 @@ int main()
 		for (size_t i = 0; i < bats.size(); ++i)
 		{
 			if (bats[i].active) bats[i].update(player.spr.getPosition(), elapsed);
+		}
+		for (size_t i = 0; i < mummies.size(); ++i)
+		{
+			if (mummies[i].active) mummies[i].update(player.spr.getPosition(), elapsed);
 		}
 		//Room types
 		if (layout[roomPointer[0]][roomPointer[1]] == 4)
@@ -255,7 +275,9 @@ int main()
 		for (size_t i = 0; i < bats.size(); ++i) {
 			bats[i].render(window);
 		}
-
+		for (size_t i = 0; i < mummies.size(); ++i) {
+			mummies[i].render(window);
+		}
 		window.draw(wallbase);
 		if (!walls[0]) {
 			wall.setRotation(0);

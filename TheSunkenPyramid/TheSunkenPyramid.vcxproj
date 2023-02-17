@@ -135,10 +135,12 @@
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playerprojectile.cpp" />
     <ClCompile Include="bat.cpp" />
+    <ClCompile Include="mummy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h" />
     <ClInclude Include="bat.h" />
+    <ClInclude Include="mummy.h" />
     <ClInclude Include="playerprojectile.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="layout.h" />
