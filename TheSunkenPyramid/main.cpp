@@ -218,9 +218,10 @@ int main()
 					}
 				}
 			}
-			if (enemyCounter = 0) {
+			if (enemyCounter == 0) {
 				layout[roomPointer[0]][roomPointer[1]] = 1;
 				roomType = 1;
+				wallsCheck(layout, roomPointer, walls);
 			}
 		}
 

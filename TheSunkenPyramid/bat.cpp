@@ -8,7 +8,6 @@ void Bat::init(sf::Texture& tex) {
 	spr.setTexture(tex);
 	sf::IntRect texR = spr.getTextureRect();
 	spr.setOrigin(texR.width / 2.f, texR.height / 2.f);
-	health = 3;
 }
 
 void Bat::update(const sf::Vector2f& playerPosition, float elapsed) {
@@ -32,6 +31,7 @@ int Bat::hurt() {
 }
 
 void Bat::activate(int playerPosition) {
+	health = 3;
 	if (playerPosition == GC::Up) {
 		spr.setPosition(sf::Vector2f(rand() % GC::GameSize + 1, rand() % (GC::GameSize / 2) + 1 + (GC::GameSize / 2) + GC::LowerBounds.y));
 	}
