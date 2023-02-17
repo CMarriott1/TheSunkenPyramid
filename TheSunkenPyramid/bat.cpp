@@ -16,8 +16,11 @@ void Bat::update(const sf::Vector2f& playerPosition, float elapsed) {
 	const float xdiff = pos.x - playerPosition.x;
 	const float ydiff = pos.y - playerPosition.y;
 	const float hypot = sqrt((xdiff * xdiff) + (ydiff * ydiff));
-	velocity.x = xdiff/hypot ;
-	velocity.y = ydiff/hypot;
+	if (hypot != 0) {
+		velocity.x = xdiff / hypot;
+		velocity.y = ydiff / hypot;
+	}
+	else velocity = sf::Vector2f(0, 0);
 	pos -= velocity * elapsed * GC::BatSpeed;
 	spr.setPosition(pos);
 }
