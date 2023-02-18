@@ -113,6 +113,21 @@ int main()
 	stairs.setTexture(stairsTex);
 	stairs.setPosition(GC::ScreenCentre.x - 16, GC::ScreenCentre.y - 16);
 
+	Texture heartContainerTex;
+	LoadTexture("data/heartContainer.png", heartContainerTex);
+	heartContainerTex.setSmooth(false);
+	Sprite heartContainer;
+	heartContainer.setTexture(heartContainerTex);
+	heartContainer.setScale(8, 8);
+
+	
+	Texture heartTex;
+	LoadTexture("data/heart.png", heartTex);
+	heartTex.setSmooth(false);
+	Sprite heart;
+	heart.setTexture(heartTex);
+	heart.setScale(8, 8);
+
 	RectangleShape infoRectangle(Vector2f(512.f, 128.f));
 	infoRectangle.setFillColor(Color(128, 128, 128));
 
@@ -276,6 +291,31 @@ int main()
 		{
 			if (enemyProjectiles[i].active) enemyProjectiles[i].update(elapsed);
 		}
+
+		//Enemy-related collision processing
+		
+		for (size_t projectile = 0; projectile < enemyProjectiles.size(); ++projectile)
+		{
+			if (enemyProjectiles[projectile].active)
+			{
+				if (collision(enemyProjectiles[projectile].spr.getPosition(), player.spr.getPosition(), GC::ProjRadius + GC::CharRadius))
+				{
+					player.hurt();
+					enemyProjectile.active = false;
+				}
+			}
+		}
+		for (size_t enemy = 0; enemy < bats.size(); ++enemy)
+		{
+			if (bats[enemy].active)
+			{
+				if (collision(bats[enemy].spr.getPosition(), player.spr.getPosition(), GC::CharRadius * 2))
+				{
+					player.hurt();
+				}
+			}
+		}
+
 		//Room types
 		if (layout[roomPointer[0]][roomPointer[1]] == 4)
 		{
@@ -306,6 +346,7 @@ int main()
 		for (size_t i = 0; i < enemyProjectiles.size(); ++i) {
 			enemyProjectiles[i].render(window);
 		}
+
 		window.draw(wallbase);
 		if (!walls[0]) {
 			wall.setRotation(0);
@@ -325,6 +366,16 @@ int main()
 		}
 
 		window.draw(infoRectangle);
+		for (int i = 0; i < player.maxHealth; ++i)
+		{
+			heartContainer.setPosition(Vector2f(20 + (i * 72), 32));
+			window.draw(heartContainer);
+			if (player.health > i)
+			{
+				heart.setPosition(Vector2f(20 + (i * 72), 32));
+				window.draw(heart);
+			}
+		}
 
 
 		//The thing that matters

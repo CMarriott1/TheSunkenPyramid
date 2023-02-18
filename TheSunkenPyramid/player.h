@@ -8,7 +8,11 @@ struct Player {
 	bool active;
 	sf::Vector2f velocity;
 	int fireDirection;
+	int maxHealth;
+	int health;
+	float invulnerability;
 
-	void update(const sf::Vector2u& screenSize, float elapsedSec);
 	void init(sf::Texture& tex);
+	void update(const sf::Vector2u& screenSize, float elapsedSec);
+	void hurt();
 };
