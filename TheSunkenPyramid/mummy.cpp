@@ -9,8 +9,14 @@ void Mummy::init(sf::Texture& tex) {
 	spr.setOrigin(texR.width / 2.f, texR.height / 2.f);
 }
 
-void Mummy::update(const sf::Vector2f& playerPosition, float elapsed) {
-
+bool Mummy::update(float elapsed) {
+	timer -= elapsed;
+	if (timer <= 0)
+	{
+		timer = GC::EnemyFiringSpeed;
+		return true;
+	}
+	else return false;
 }
 
 int Mummy::hurt() {
@@ -24,6 +30,7 @@ int Mummy::hurt() {
 
 void Mummy::activate(int playerPosition) {
 	health = 3;
+	timer = 1;
 	if (playerPosition == GC::Up) {
 		spr.setPosition(sf::Vector2f(rand() % (GC::EnemySpawn)+GC::MinSpawnDist, rand() % (GC::EnemySpawnHalf)+(GC::GameSize / 2) + GC::CharRadius + GC::LowerBounds.y));
 	}

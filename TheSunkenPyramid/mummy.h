@@ -8,9 +8,10 @@ struct Mummy {
 	bool active;
 	sf::Vector2f velocity;
 	int health;
+	float timer;
 
 	void init(sf::Texture& tex);
-	void update(const sf::Vector2f& playerPosition, float elapsed);
+	bool update(float elapsed);
 	int hurt();
 	void activate(int playerPosition);
 	void render(sf::RenderWindow&);

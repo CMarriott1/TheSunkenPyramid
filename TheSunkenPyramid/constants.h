@@ -19,6 +19,8 @@ namespace GC
 	const float PlayerFiringSpeed = 0.75f;
 
 	const float BatSpeed = 120.f;
+	const float EnemyProjectileSpeed = 270.f;
+	const float EnemyFiringSpeed = 1.f;
 
 	//Radii (for collisions)
 	const int CharRadius = 16;

@@ -33,6 +33,9 @@
     <ClCompile Include="mummy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="enemyprojectile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h">
@@ -51,6 +54,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mummy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="enemyprojectile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

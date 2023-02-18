@@ -7,6 +7,7 @@
 #include "playerprojectile.h"
 #include "bat.h"
 #include "mummy.h"
+#include "enemyprojectile.h"
 
  
 using namespace sf;
@@ -98,6 +99,13 @@ int main()
 	mummy.init(mummyTex);
 	std::vector<Mummy>mummies;
 	mummies.insert(mummies.begin(), 4, mummy);
+
+	Texture enemyProjectileTex;
+	LoadTexture("data/enemyProjectile.png", enemyProjectileTex);
+	EnemyProjectile enemyProjectile;
+	enemyProjectile.init(enemyProjectileTex);
+	std::vector<EnemyProjectile>enemyProjectiles;
+	enemyProjectiles.insert(enemyProjectiles.begin(), 3, enemyProjectile);
 
 	Texture stairsTex;
 	LoadTexture("data/stairs.png", stairsTex);
@@ -249,7 +257,24 @@ int main()
 		}
 		for (size_t i = 0; i < mummies.size(); ++i)
 		{
-			if (mummies[i].active) mummies[i].update(player.spr.getPosition(), elapsed);
+			if (mummies[i].active)
+			{
+				if (mummies[i].update(elapsed))
+				{
+					for (size_t j = 0; j < enemyProjectiles.size(); ++j)
+					{
+						if (!enemyProjectiles[j].active)
+						{
+							enemyProjectiles[j].activate(mummies[i].spr.getPosition(), player.spr.getPosition());
+							break;
+						}
+					}
+				}
+			}
+		}
+		for (size_t i = 0; i < enemyProjectiles.size(); ++i)
+		{
+			if (enemyProjectiles[i].active) enemyProjectiles[i].update(elapsed);
 		}
 		//Room types
 		if (layout[roomPointer[0]][roomPointer[1]] == 4)
@@ -277,6 +302,9 @@ int main()
 		}
 		for (size_t i = 0; i < mummies.size(); ++i) {
 			mummies[i].render(window);
+		}
+		for (size_t i = 0; i < enemyProjectiles.size(); ++i) {
+			enemyProjectiles[i].render(window);
 		}
 		window.draw(wallbase);
 		if (!walls[0]) {
