@@ -10,6 +10,6 @@ struct PlayerProjectile {
 
 	void init(sf::Texture& tex);
 	void update(float elapsedSec);
-	void activate(int direction, const sf::Vector2f& playerPosition);
+	void activate(int direction, const sf::Vector2f& playerPosition, std::vector<int>offset);
 	void render(sf::RenderWindow& window);
 };

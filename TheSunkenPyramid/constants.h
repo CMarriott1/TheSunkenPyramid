@@ -26,6 +26,13 @@ namespace GC
 	const int CharRadius = 16;
 	const int ProjRadius = 2;
 
+	//Firing effects
+	const std::vector<int>StandardShot{ 0,0 };
+	const std::vector<int>DoubleShotLeft{ -8,0 };
+	const std::vector<int>DoubleShotRight{ 8,0 };
+	const std::vector<int>RightShot{ 0,1 };
+	const std::vector<int>BackShot{ 0,2 };
+	const std::vector<int>LeftShot{ 0,3 };
 
 	//Enemy Spawning
 	const int EnemySpawn = 464; //Gamesize minus 2 walls and character length

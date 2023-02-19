@@ -14,5 +14,5 @@ struct Player {
 
 	void init(sf::Texture& tex);
 	void update(const sf::Vector2u& screenSize, float elapsedSec);
-	void hurt();
+	bool hurt();
 };
