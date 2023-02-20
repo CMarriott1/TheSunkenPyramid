@@ -140,11 +140,13 @@
     <ClCompile Include="bat.cpp" />
     <ClCompile Include="mummy.cpp" />
     <ClCompile Include="enemyprojectile.cpp" />
+    <ClCompile Include="jewel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h" />
     <ClInclude Include="bat.h" />
     <ClInclude Include="enemyprojectile.h" />
+    <ClInclude Include="jewel.h" />
     <ClInclude Include="mummy.h" />
     <ClInclude Include="playerprojectile.h" />
     <ClInclude Include="player.h" />

@@ -7,6 +7,7 @@ void PlayerProjectile::init(sf::Texture& tex) {
 	spr.setTexture(tex);
 	sf::IntRect texR = spr.getTextureRect();
 	spr.setOrigin(texR.width / 2.f, texR.height / 2.f);
+	loop = false;
 };
 
 void PlayerProjectile::update(float elapsedSec) {

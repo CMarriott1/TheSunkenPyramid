@@ -8,6 +8,7 @@
 #include "bat.h"
 #include "mummy.h"
 #include "enemyprojectile.h"
+#include "jewel.h"
 
  
 using namespace sf;
@@ -163,13 +164,29 @@ int main()
 	heartContainer.setTexture(heartContainerTex);
 	heartContainer.setScale(8, 8);
 
-	
 	Texture heartTex;
 	LoadTexture("data/heart.png", heartTex);
 	heartTex.setSmooth(false);
 	Sprite heart;
 	heart.setTexture(heartTex);
 	heart.setScale(8, 8);
+
+	Texture whiteJewelTex;
+	LoadTexture("data/whiteJewel.png", whiteJewelTex);
+	Texture purpleJewelTex;
+	LoadTexture("data/purpleJewel.png", purpleJewelTex);
+	Texture blueJewelTex;
+	LoadTexture("data/blueJewel.png", blueJewelTex);
+	Texture yellowJewelTex;
+	LoadTexture("data/yellowJewel.png", yellowJewelTex);
+	Jewel jewel;
+	std::vector<Jewel>jewels;
+	jewels.insert(jewels.begin(), 4, jewel);
+	jewels[0].init(whiteJewelTex,0);
+	jewels[1].init(purpleJewelTex,1);
+	jewels[2].init(blueJewelTex,2);
+	jewels[3].init(yellowJewelTex,3);
+	std::random_shuffle(jewels.begin(), jewels.end());
 
 	RectangleShape infoRectangle(Vector2f(512.f, 128.f));
 	infoRectangle.setFillColor(Color(128, 128, 128));
@@ -360,13 +377,24 @@ int main()
 				}
 			}
 
-			//Room types
+			//Other room types
+			if (layout[roomPointer[0]][roomPointer[1]] == 3)
+			{
+				window.draw(jewels[floorNumber - 1].spr);
+				if (player.spr.getPosition().x < GC::ScreenCentre.x + 32 && player.spr.getPosition().x > GC::ScreenCentre.x - 32 && player.spr.getPosition().y > GC::ScreenCentre.y - 32 && player.spr.getPosition().y < GC::ScreenCentre.y + 32)
+				{
+					items[jewels[floorNumber - 1].jewelType] = true;
+					jewels[floorNumber - 1].collect(floorNumber - 1);
+					layout[roomPointer[0]][roomPointer[1]] = 1;
+				}
+			}
 			if (layout[roomPointer[0]][roomPointer[1]] == 4)
 			{
 				window.draw(stairs);
 				if (player.spr.getPosition().x < GC::ScreenCentre.x + 32 && player.spr.getPosition().x > GC::ScreenCentre.x - 32 && player.spr.getPosition().y > GC::ScreenCentre.y - 32 && player.spr.getPosition().y < GC::ScreenCentre.y + 32)
 				{
 					std::cout << "Floor clear\n";
+					player.health = player.maxHealth;
 					player.spr.setPosition(GC::ScreenCentre.x, GC::ScreenCentre.y);
 					roomPointer = { GC::FloorCentre.x, GC::FloorCentre.y };
 					++floorNumber;
@@ -421,6 +449,10 @@ int main()
 				}
 			}
 
+			if (jewels[0].found) window.draw(jewels[0].spr);
+			if (jewels[1].found) window.draw(jewels[1].spr);
+			if (jewels[2].found) window.draw(jewels[2].spr);
+			if (jewels[3].found) window.draw(jewels[3].spr);
 
 			//The thing that matters
 			window.display();
