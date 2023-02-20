@@ -79,26 +79,26 @@ void fire(std::vector<bool>& items, std::vector<PlayerProjectile>& projectiles, 
 	int projectileIndex = 0;
 	if (items[0])
 	{
-		projectiles[inactiveProjectiles[projectileIndex]].activate(player.fireDirection, player.spr.getPosition(),GC::DoubleShotLeft);
+		projectiles[inactiveProjectiles[projectileIndex]].activate(player.fireDirection, player.spr.getPosition(),GC::DoubleShotLeft,items[1]);
 		++projectileIndex;
-		projectiles[inactiveProjectiles[projectileIndex]].activate(player.fireDirection, player.spr.getPosition(), GC::DoubleShotRight);
+		projectiles[inactiveProjectiles[projectileIndex]].activate(player.fireDirection, player.spr.getPosition(), GC::DoubleShotRight, items[1]);
 		++projectileIndex;
 	}
 	else
 	{
-		projectiles[inactiveProjectiles[projectileIndex]].activate(player.fireDirection, player.spr.getPosition(),GC::StandardShot);
+		projectiles[inactiveProjectiles[projectileIndex]].activate(player.fireDirection, player.spr.getPosition(),GC::StandardShot,items[1]);
 		++projectileIndex;
 	}
 	if (items[2])
 	{
-		projectiles[inactiveProjectiles[projectileIndex]].activate(player.fireDirection, player.spr.getPosition(),GC::BackShot);
+		projectiles[inactiveProjectiles[projectileIndex]].activate(player.fireDirection, player.spr.getPosition(),GC::BackShot, items[1]);
 		++projectileIndex;
 	}
 	if (items[3])
 	{
-		projectiles[inactiveProjectiles[projectileIndex]].activate(player.fireDirection, player.spr.getPosition(),GC::RightShot);
+		projectiles[inactiveProjectiles[projectileIndex]].activate(player.fireDirection, player.spr.getPosition(),GC::RightShot, items[1]);
 		++projectileIndex;
-		projectiles[inactiveProjectiles[projectileIndex]].activate(player.fireDirection, player.spr.getPosition(),GC::LeftShot);
+		projectiles[inactiveProjectiles[projectileIndex]].activate(player.fireDirection, player.spr.getPosition(),GC::LeftShot, items[1]);
 		++projectileIndex;
 	}
 }
@@ -217,6 +217,7 @@ int main()
 						window.close();
 					}
 					if (event.key.code == Keyboard::Num1) items[0] = !items[0];
+					if (event.key.code == Keyboard::Num2) items[1] = !items[1];
 					if (event.key.code == Keyboard::Num3) items[2] = !items[2];
 					if (event.key.code == Keyboard::Num4) items[3] = !items[3];
 				}
