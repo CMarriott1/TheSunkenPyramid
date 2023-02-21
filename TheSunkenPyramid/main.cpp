@@ -285,25 +285,41 @@ int main()
 			if (player.spr.getPosition().x < GC::LowerBounds.x + 24 && walls[3] == true) player.spr.setPosition(GC::LowerBounds.x + 24, player.spr.getPosition().y);
 
 			//Is player moving into an exit?
-			if (player.spr.getPosition().y < GC::LowerBounds.y + 8 && walls[0] == false) {
-				player.spr.setPosition(player.spr.getPosition().x, GC::WindowSize.y - 24);
-				roomPointer[0] -= 1;
-				newRoom(layout, roomPointer, walls, playerProjectiles, GC::Down, floorNumber, bats, mummies, roomType, enemyCounter);
+			if (player.spr.getPosition().y < GC::LowerBounds.y + 24 && walls[0] == false) {
+				if (player.spr.getPosition().x > GC::LowerBounds.x + 208 && player.spr.getPosition().x < GC::WindowSize.x - 208)
+				{
+					player.spr.setPosition(player.spr.getPosition().x, GC::WindowSize.y - 24);
+					roomPointer[0] -= 1;
+					newRoom(layout, roomPointer, walls, playerProjectiles, GC::Down, floorNumber, bats, mummies, roomType, enemyCounter);
+				}
+				else player.spr.setPosition(player.spr.getPosition().x, GC::LowerBounds.y + 24);
 			}
-			if (player.spr.getPosition().x > GC::WindowSize.x - 8 && walls[1] == false) {
-				player.spr.setPosition(GC::LowerBounds.x + 24, player.spr.getPosition().y);
-				roomPointer[1] += 1;
-				newRoom(layout, roomPointer, walls, playerProjectiles, GC::Left, floorNumber, bats, mummies, roomType, enemyCounter);
+			if (player.spr.getPosition().x > GC::WindowSize.x - 24 && walls[1] == false) {
+				if (player.spr.getPosition().y > GC::LowerBounds.y + 208 && player.spr.getPosition().y < GC::WindowSize.y - 208)
+				{
+					player.spr.setPosition(GC::LowerBounds.x + 24, player.spr.getPosition().y);
+					roomPointer[1] += 1;
+					newRoom(layout, roomPointer, walls, playerProjectiles, GC::Left, floorNumber, bats, mummies, roomType, enemyCounter);
+				}
+				else player.spr.setPosition(GC::WindowSize.x - 24, player.spr.getPosition().y);
 			}
-			if (player.spr.getPosition().y > GC::WindowSize.y - 8 && walls[2] == false) {
-				player.spr.setPosition(player.spr.getPosition().x, GC::LowerBounds.y + 24);
-				roomPointer[0] += 1;
-				newRoom(layout, roomPointer, walls, playerProjectiles, GC::Up, floorNumber, bats, mummies, roomType, enemyCounter);
+			if (player.spr.getPosition().y > GC::WindowSize.y - 24 && walls[2] == false) {
+				if (player.spr.getPosition().x > GC::LowerBounds.x + 208 && player.spr.getPosition().x < GC::WindowSize.x - 208)
+				{
+					player.spr.setPosition(player.spr.getPosition().x, GC::LowerBounds.y + 24);
+					roomPointer[0] += 1;
+					newRoom(layout, roomPointer, walls, playerProjectiles, GC::Up, floorNumber, bats, mummies, roomType, enemyCounter);
+				}
+				else player.spr.setPosition(player.spr.getPosition().x, GC::WindowSize.y - 24);
 			}
-			if (player.spr.getPosition().x < GC::LowerBounds.x + 8 && walls[3] == false) {
-				player.spr.setPosition(GC::WindowSize.x - 24, player.spr.getPosition().y);
-				roomPointer[1] -= 1;
-				newRoom(layout, roomPointer, walls, playerProjectiles, GC::Right, floorNumber, bats, mummies, roomType, enemyCounter);
+			if (player.spr.getPosition().x < GC::LowerBounds.x + 24 && walls[3] == false) {
+				if (player.spr.getPosition().y > GC::LowerBounds.y + 208 && player.spr.getPosition().y < GC::WindowSize.y - 208)
+				{
+					player.spr.setPosition(GC::WindowSize.x - 24, player.spr.getPosition().y);
+					roomPointer[1] -= 1;
+					newRoom(layout, roomPointer, walls, playerProjectiles, GC::Right, floorNumber, bats, mummies, roomType, enemyCounter);
+				}
+				else player.spr.setPosition(GC::LowerBounds.x + 24, player.spr.getPosition().y);
 			}
 
 			//Player related collision processing
