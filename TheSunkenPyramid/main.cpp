@@ -118,6 +118,19 @@ int main()
 
 	window.setKeyRepeatEnabled(false);
 	
+	//Menu Sprites
+	Texture mainMenuTex;
+	LoadTexture("data/mainmenu.png", mainMenuTex);
+	Sprite mainMenu;
+	mainMenu.setTexture(mainMenuTex);
+
+	Texture menuSelectTex;
+	LoadTexture("data/menuselect.png", menuSelectTex);
+	Sprite menuSelect;
+	menuSelect.setTexture(menuSelectTex);
+	menuSelect.setPosition(154, 401);
+
+	//Game Sprites
 	Texture playerTex;
 	LoadTexture("data/player.png", playerTex);
 	Player player;
@@ -233,6 +246,26 @@ int main()
 	bool loopbreak = false;
 	int score = 250;
 	
+	while (!loopbreak)
+	{
+		while (window.pollEvent(event))
+		{
+			if (event.type == Event::Closed) window.close();
+
+			if (event.type == Event::KeyPressed)
+			{
+				if (event.key.code == Keyboard::Escape) window.close();
+				if (event.key.code == Keyboard::Enter) loopbreak = true;
+				if (event.key.code == Keyboard::Up || event.key.code == Keyboard::W) menuSelect.setPosition(154, 305);
+				else if (event.key.code == Keyboard::Down || event.key.code == Keyboard::S) menuSelect.setPosition(154, 401);
+			}
+			window.clear();
+			window.draw(mainMenu);
+			window.draw(menuSelect);
+			window.display();
+		}
+	}
+	loopbreak = false;
 	//Start game loop
 	while (window.isOpen())
 	{
