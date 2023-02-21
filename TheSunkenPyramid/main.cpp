@@ -205,14 +205,14 @@ int main()
 	infoRectangle.setFillColor(Color(128, 128, 128));
 
 	RectangleShape wallbase(Vector2f(496.f, 496.f));
-	wallbase.setOutlineColor(Color(255, 0, 0));
+	wallbase.setOutlineColor(Color(229, 229, 139));
 	wallbase.setOutlineThickness(8);
 	wallbase.setFillColor(Color::Transparent);
 	wallbase.setOrigin(248.f, 248.f);
 	wallbase.setPosition(GC::ScreenCentre.x, GC::ScreenCentre.y);
 	
 	RectangleShape wall(Vector2f(128.f, 8.f));
-	wall.setFillColor(Color(0, 0, 0));
+	wall.setFillColor(Color(160, 126, 32));
 	wall.setOrigin(64.f, 256.f);
 	wall.setPosition(GC::ScreenCentre.x, GC::ScreenCentre.y);
 	wall.setRotation(90);
@@ -289,7 +289,7 @@ int main()
 				}
 			}
 
-			window.clear();
+			window.clear(Color(160, 126, 32));
 
 			float elapsed = clock.getElapsedTime().asSeconds();
 			clock.restart();
