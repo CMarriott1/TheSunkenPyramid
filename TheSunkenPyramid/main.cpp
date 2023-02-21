@@ -204,6 +204,20 @@ int main()
 	wall.setPosition(GC::ScreenCentre.x, GC::ScreenCentre.y);
 	wall.setRotation(90);
 
+	Font font;
+	font.loadFromFile("data/bgothl.ttf");
+	Text scoreText;
+	scoreText.setFont(font);
+	scoreText.setCharacterSize(24);
+	scoreText.setString("250");
+	scoreText.setPosition(20, 88);
+	Text floorText;
+	floorText.setFont(font);
+	floorText.setCharacterSize(24);
+	floorText.setString("Floor: 1");
+	floorText.setPosition(112, 88);
+	floorText.setFillColor(Color(127, 255, 255));
+
 	Clock clock;
 
 	std::vector<std::vector<int>>layout(LG::layoutGeneration());
@@ -213,10 +227,12 @@ int main()
 
 	Event event;
 
+	float secondtimer = 1;
 	float firetimer = 0;
 	std::vector<bool>items(4, false);
 	bool loopbreak = false;
-
+	int score = 250;
+	
 	//Start game loop
 	while (window.isOpen())
 	{
@@ -321,6 +337,8 @@ int main()
 				if (enemyCounter == 0) {
 					layout[roomPointer[0]][roomPointer[1]] = 1;
 					roomType = 1;
+					score += 25;
+					scoreText.setString(std::to_string(score));
 					wallsCheck(layout, roomPointer, walls);
 				}
 			}
@@ -377,15 +395,26 @@ int main()
 				}
 			}
 
+			//Score decrease
+			secondtimer -= elapsed;
+			if (secondtimer < 0)
+			{
+				score -= 1;
+				secondtimer = 1;
+				scoreText.setString(std::to_string(score));
+			}
+
 			//Other room types
 			if (layout[roomPointer[0]][roomPointer[1]] == 3)
 			{
 				window.draw(jewels[floorNumber - 1].spr);
 				if (player.spr.getPosition().x < GC::ScreenCentre.x + 32 && player.spr.getPosition().x > GC::ScreenCentre.x - 32 && player.spr.getPosition().y > GC::ScreenCentre.y - 32 && player.spr.getPosition().y < GC::ScreenCentre.y + 32)
 				{
+					score += 100;
 					items[jewels[floorNumber - 1].jewelType] = true;
 					jewels[floorNumber - 1].collect(floorNumber - 1);
 					layout[roomPointer[0]][roomPointer[1]] = 1;
+					scoreText.setString(std::to_string(score));
 				}
 			}
 			if (layout[roomPointer[0]][roomPointer[1]] == 4)
@@ -393,11 +422,14 @@ int main()
 				window.draw(stairs);
 				if (player.spr.getPosition().x < GC::ScreenCentre.x + 32 && player.spr.getPosition().x > GC::ScreenCentre.x - 32 && player.spr.getPosition().y > GC::ScreenCentre.y - 32 && player.spr.getPosition().y < GC::ScreenCentre.y + 32)
 				{
+					score += 100;
 					std::cout << "Floor clear\n";
 					player.health = player.maxHealth;
 					player.spr.setPosition(GC::ScreenCentre.x, GC::ScreenCentre.y);
 					roomPointer = { GC::FloorCentre.x, GC::FloorCentre.y };
 					++floorNumber;
+					floorText.setString("Floor: " + std::to_string(floorNumber));
+					scoreText.setString(std::to_string(score));
 					layout = LG::layoutGeneration(floorNumber);
 					wallsCheck(layout, roomPointer, walls);
 				}
@@ -440,11 +472,11 @@ int main()
 			window.draw(infoRectangle);
 			for (int i = 0; i < player.maxHealth; ++i)
 			{
-				heartContainer.setPosition(Vector2f(20 + (i * 72), 32));
+				heartContainer.setPosition(Vector2f(20 + (i * 72), 20));
 				window.draw(heartContainer);
 				if (player.health > i)
 				{
-					heart.setPosition(Vector2f(20 + (i * 72), 32));
+					heart.setPosition(Vector2f(20 + (i * 72), 20));
 					window.draw(heart);
 				}
 			}
@@ -454,6 +486,8 @@ int main()
 			if (jewels[2].found) window.draw(jewels[2].spr);
 			if (jewels[3].found) window.draw(jewels[3].spr);
 
+			window.draw(scoreText);
+			window.draw(floorText);
 			//The thing that matters
 			window.display();
 		}
