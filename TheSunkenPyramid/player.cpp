@@ -35,11 +35,12 @@ void Player::update(const sf::Vector2u& screenSize, float elapsedSec)
 	invulnerability -= elapsedSec;
 }
 
-bool Player::hurt()
+bool Player::hurt(int& score)
 {
 	if (invulnerability <= 0)
 	{
 		--health;
+		score -= 25;
 		invulnerability = 1;
 
 		if (health <= 0)

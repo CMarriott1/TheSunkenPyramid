@@ -24,6 +24,8 @@ namespace GC
 
 	//Radii (for collisions)
 	const int CharRadius = 16;
+	const int MummyRadius = 32;
+	const int BatRadius = 32;
 	const int ProjRadius = 2;
 
 	//Firing effects
@@ -34,11 +36,6 @@ namespace GC
 	const std::vector<int>BackShot{ 0,2 };
 	const std::vector<int>LeftShot{ 0,3 };
 
-	//Enemy Spawning
-	const int EnemySpawn = 464; //Gamesize minus 2 walls and character length
-	const int MinSpawnDist = 24; //Wall plus half char sprite (origin is centre)
-	const int EnemySpawnHalf = 216; //Half gamesize - 1 wall and character length. Ironically not half
-
 	//Misc
 	const int WallSize = 8;
 	const int GameSize = 512;
@@ -47,4 +44,9 @@ namespace GC
 	const Dim2Di FloorCentre{ 6,6 };
 	const Dim2Di WindowSize{512, 640};
 	const Dim2Di LowerBounds{ 0,128 };
+
+	//Enemy Spawning
+	const int EnemySpawn = GameSize - (2 * WallSize) - (2 * CharRadius); //Gamesize minus 2 walls and character length
+	const int MinSpawnDist = WallSize + CharRadius; //Wall plus half char sprite (origin is centre)
+	const int EnemySpawnHalf = (GameSize / 2) - WallSize - (2 * CharRadius); //Half gamesize - 1 wall and character length. Ironically not half
 }

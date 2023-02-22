@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\sqlite\sqlite3.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="layout.cpp" />
     <ClCompile Include="player.cpp" />
@@ -141,11 +142,14 @@
     <ClCompile Include="mummy.cpp" />
     <ClCompile Include="enemyprojectile.cpp" />
     <ClCompile Include="jewel.cpp" />
+    <ClCompile Include="leaderboard.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\sqlite\sqlite3.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="bat.h" />
     <ClInclude Include="enemyprojectile.h" />
+    <ClInclude Include="leaderboard.h" />
     <ClInclude Include="jewel.h" />
     <ClInclude Include="mummy.h" />
     <ClInclude Include="playerprojectile.h" />

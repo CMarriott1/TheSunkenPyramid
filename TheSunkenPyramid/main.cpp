@@ -33,15 +33,25 @@ void wallsCheck(std::vector<std::vector<int>>&layout, std::vector<int>&roomPoint
 	if (layout[roomPointer[0]][roomPointer[1] - 1] == 0) walls[3] = true;
 }
 
-void newRoom(std::vector<std::vector<int>>& layout, std::vector<int>& roomPointer, std::vector<bool>& walls, std::vector<PlayerProjectile>& projectiles, int playerPosition, int floorNumber, std::vector<Bat>& bats, std::vector<Mummy>& mummies, int& roomType, int& enemyCounter)
+void newRoom(std::vector<std::vector<int>>& layout, std::vector<int>& roomPointer, std::vector<bool>& walls, std::vector<PlayerProjectile>& projectiles, std::vector<EnemyProjectile>& enemyProjectiles , int playerPosition, int floorNumber, std::vector<Bat>& bats, std::vector<Mummy>& mummies, int& roomType, int& enemyCounter)
 {
+	//Wall update
 	wallsCheck(layout, roomPointer, walls);
+
+	//Projectile Clearing
 	for (size_t i = 0; i < projectiles.size(); ++i)
 	{
 		projectiles[i].active = false;
 	}
-
+	for (size_t i = 0; i < enemyProjectiles.size(); ++i)
+	{
+		enemyProjectiles[i].active = false;
+	}
+	
+	//Room type update 
 	roomType = layout[roomPointer[0]][roomPointer[1]];
+
+	//Enemy room initialisation
 	if (roomType == 2)
 	{
 		for (size_t i = 0; i < floorNumber; ++i)
@@ -63,6 +73,7 @@ bool collision(const Vector2f& pos1, const Vector2f& pos2, int radii)
 
 void fire(std::vector<bool>& items, std::vector<PlayerProjectile>& projectiles, Player& player)
 {
+	//Initialisation
 	int projectileCount = 1;
 	if (items[0]) projectileCount += 1;
 	if (items[2]) projectileCount += 1;
@@ -78,6 +89,8 @@ void fire(std::vector<bool>& items, std::vector<PlayerProjectile>& projectiles, 
 		}
 	}
 	int projectileIndex = 0;
+
+	//Projectile Creation
 	if (items[0])
 	{
 		projectiles[inactiveProjectiles[projectileIndex]].activate(player.fireDirection, player.spr.getPosition(),GC::DoubleShotLeft,items[1]);
@@ -106,7 +119,7 @@ void fire(std::vector<bool>& items, std::vector<PlayerProjectile>& projectiles, 
 
 int main()
 {
-	//Initialisation
+//Initialisation
 
 	srand(time(NULL));
 
@@ -231,6 +244,7 @@ int main()
 	floorText.setPosition(112, 88);
 	floorText.setFillColor(Color(127, 255, 255));
 
+	//More variable initialisation
 	Clock clock;
 
 	std::vector<std::vector<int>>layout(LG::layoutGeneration());
@@ -246,6 +260,7 @@ int main()
 	bool loopbreak = false;
 	int score = 250;
 	
+	//Main Menu
 	while (!loopbreak)
 	{
 		while (window.pollEvent(event))
@@ -266,9 +281,10 @@ int main()
 		}
 	}
 	loopbreak = false;
-	//Start game loop
+	//Post main menu content
 	while (window.isOpen())
 	{
+		//Gane loop
 		while (!loopbreak)
 		{
 			// Process events
@@ -282,10 +298,6 @@ int main()
 					if (event.key.code == Keyboard::Escape) {
 						window.close();
 					}
-					if (event.key.code == Keyboard::Num1) items[0] = !items[0];
-					if (event.key.code == Keyboard::Num2) items[1] = !items[1];
-					if (event.key.code == Keyboard::Num3) items[2] = !items[2];
-					if (event.key.code == Keyboard::Num4) items[3] = !items[3];
 				}
 			}
 
@@ -312,47 +324,47 @@ int main()
 			}
 
 			//Is playing moving into a wall?
-			if (player.spr.getPosition().y < GC::LowerBounds.y + 24 && walls[0] == true) player.spr.setPosition(player.spr.getPosition().x, GC::LowerBounds.y + 24);
+			if (player.spr.getPosition().y < GC::LowerBounds.y + (GC::WallSize + GC::CharRadius) && walls[0] == true) player.spr.setPosition(player.spr.getPosition().x, GC::LowerBounds.y + 24);
 			if (player.spr.getPosition().x > GC::WindowSize.x - 24 && walls[1] == true) player.spr.setPosition(GC::WindowSize.x - 24, player.spr.getPosition().y);
 			if (player.spr.getPosition().y > GC::WindowSize.y - 24 && walls[2] == true) player.spr.setPosition(player.spr.getPosition().x, GC::WindowSize.y - 24);
 			if (player.spr.getPosition().x < GC::LowerBounds.x + 24 && walls[3] == true) player.spr.setPosition(GC::LowerBounds.x + 24, player.spr.getPosition().y);
 
 			//Is player moving into an exit?
-			if (player.spr.getPosition().y < GC::LowerBounds.y + 24 && walls[0] == false) {
+			if (player.spr.getPosition().y < GC::LowerBounds.y + (GC::WallSize + GC::CharRadius) && walls[0] == false) {
 				if (player.spr.getPosition().x > GC::LowerBounds.x + 208 && player.spr.getPosition().x < GC::WindowSize.x - 208)
 				{
-					player.spr.setPosition(player.spr.getPosition().x, GC::WindowSize.y - 24);
+					player.spr.setPosition(player.spr.getPosition().x, GC::WindowSize.y - (GC::WallSize + GC::CharRadius));
 					roomPointer[0] -= 1;
-					newRoom(layout, roomPointer, walls, playerProjectiles, GC::Down, floorNumber, bats, mummies, roomType, enemyCounter);
+					newRoom(layout, roomPointer, walls, playerProjectiles, enemyProjectiles, GC::Down, floorNumber, bats, mummies, roomType, enemyCounter);
 				}
-				else player.spr.setPosition(player.spr.getPosition().x, GC::LowerBounds.y + 24);
+				else player.spr.setPosition(player.spr.getPosition().x, GC::LowerBounds.y + (GC::WallSize + GC::CharRadius));
 			}
-			if (player.spr.getPosition().x > GC::WindowSize.x - 24 && walls[1] == false) {
+			if (player.spr.getPosition().x > GC::WindowSize.x - (GC::WallSize + GC::CharRadius) && walls[1] == false) {
 				if (player.spr.getPosition().y > GC::LowerBounds.y + 208 && player.spr.getPosition().y < GC::WindowSize.y - 208)
 				{
-					player.spr.setPosition(GC::LowerBounds.x + 24, player.spr.getPosition().y);
+					player.spr.setPosition(GC::LowerBounds.x + (GC::WallSize + GC::CharRadius), player.spr.getPosition().y);
 					roomPointer[1] += 1;
-					newRoom(layout, roomPointer, walls, playerProjectiles, GC::Left, floorNumber, bats, mummies, roomType, enemyCounter);
+					newRoom(layout, roomPointer, walls, playerProjectiles, enemyProjectiles, GC::Left, floorNumber, bats, mummies, roomType, enemyCounter);
 				}
-				else player.spr.setPosition(GC::WindowSize.x - 24, player.spr.getPosition().y);
+				else player.spr.setPosition(GC::WindowSize.x - (GC::WallSize + GC::CharRadius), player.spr.getPosition().y);
 			}
-			if (player.spr.getPosition().y > GC::WindowSize.y - 24 && walls[2] == false) {
+			if (player.spr.getPosition().y > GC::WindowSize.y - (GC::WallSize + GC::CharRadius) && walls[2] == false) {
 				if (player.spr.getPosition().x > GC::LowerBounds.x + 208 && player.spr.getPosition().x < GC::WindowSize.x - 208)
 				{
-					player.spr.setPosition(player.spr.getPosition().x, GC::LowerBounds.y + 24);
+					player.spr.setPosition(player.spr.getPosition().x, GC::LowerBounds.y + (GC::WallSize + GC::CharRadius));
 					roomPointer[0] += 1;
-					newRoom(layout, roomPointer, walls, playerProjectiles, GC::Up, floorNumber, bats, mummies, roomType, enemyCounter);
+					newRoom(layout, roomPointer, walls, playerProjectiles, enemyProjectiles, GC::Up, floorNumber, bats, mummies, roomType, enemyCounter);
 				}
-				else player.spr.setPosition(player.spr.getPosition().x, GC::WindowSize.y - 24);
+				else player.spr.setPosition(player.spr.getPosition().x, GC::WindowSize.y - (GC::WallSize + GC::CharRadius));
 			}
-			if (player.spr.getPosition().x < GC::LowerBounds.x + 24 && walls[3] == false) {
+			if (player.spr.getPosition().x < GC::LowerBounds.x + (GC::WallSize + GC::CharRadius) && walls[3] == false) {
 				if (player.spr.getPosition().y > GC::LowerBounds.y + 208 && player.spr.getPosition().y < GC::WindowSize.y - 208)
 				{
-					player.spr.setPosition(GC::WindowSize.x - 24, player.spr.getPosition().y);
+					player.spr.setPosition(GC::WindowSize.x - (GC::WallSize + GC::CharRadius), player.spr.getPosition().y);
 					roomPointer[1] -= 1;
-					newRoom(layout, roomPointer, walls, playerProjectiles, GC::Right, floorNumber, bats, mummies, roomType, enemyCounter);
+					newRoom(layout, roomPointer, walls, playerProjectiles, enemyProjectiles, GC::Right, floorNumber, bats, mummies, roomType, enemyCounter);
 				}
-				else player.spr.setPosition(GC::LowerBounds.x + 24, player.spr.getPosition().y);
+				else player.spr.setPosition(GC::LowerBounds.x + (GC::WallSize + GC::CharRadius), player.spr.getPosition().y);
 			}
 
 			//Player related collision processing
@@ -366,7 +378,7 @@ int main()
 						{
 							if (bats[enemy].active)
 							{
-								if (collision(playerProjectiles[projectile].spr.getPosition(), bats[enemy].spr.getPosition(), GC::ProjRadius + GC::CharRadius))
+								if (collision(playerProjectiles[projectile].spr.getPosition(), bats[enemy].spr.getPosition(), GC::ProjRadius + GC::MummyRadius))
 								{
 									enemyCounter -= bats[enemy].hurt();
 									playerProjectiles[projectile].active = false;
@@ -374,7 +386,7 @@ int main()
 							}
 							else if (mummies[enemy].active)
 							{
-								if (collision(playerProjectiles[projectile].spr.getPosition(), mummies[enemy].spr.getPosition(), GC::ProjRadius + GC::CharRadius))
+								if (collision(playerProjectiles[projectile].spr.getPosition(), mummies[enemy].spr.getPosition(), GC::ProjRadius + GC::MummyRadius))
 								{
 									enemyCounter -= mummies[enemy].hurt();
 									playerProjectiles[projectile].active = false;
@@ -428,8 +440,10 @@ int main()
 				{
 					if (collision(enemyProjectiles[projectile].spr.getPosition(), player.spr.getPosition(), GC::ProjRadius + GC::CharRadius))
 					{
-						loopbreak = player.hurt();
-						enemyProjectile.active = false;
+						loopbreak = player.hurt(score);
+						enemyProjectiles[projectile].active = false;
+						scoreText.setString(std::to_string(score));
+
 					}
 				}
 			}
@@ -437,9 +451,10 @@ int main()
 			{
 				if (bats[enemy].active)
 				{
-					if (collision(bats[enemy].spr.getPosition(), player.spr.getPosition(), GC::CharRadius * 2))
+					if (collision(bats[enemy].spr.getPosition(), player.spr.getPosition(), GC::CharRadius + GC::BatRadius))
 					{
-						loopbreak = player.hurt();
+						loopbreak = player.hurt(score);
+						scoreText.setString(std::to_string(score));
 					}
 				}
 			}
@@ -477,10 +492,17 @@ int main()
 					player.spr.setPosition(GC::ScreenCentre.x, GC::ScreenCentre.y);
 					roomPointer = { GC::FloorCentre.x, GC::FloorCentre.y };
 					++floorNumber;
-					floorText.setString("Floor: " + std::to_string(floorNumber));
-					scoreText.setString(std::to_string(score));
-					layout = LG::layoutGeneration(floorNumber);
-					wallsCheck(layout, roomPointer, walls);
+					if (floorNumber == 5)
+					{
+						loopbreak = true;
+					}
+					else
+					{
+						floorText.setString("Floor: " + std::to_string(floorNumber));
+						scoreText.setString(std::to_string(score));
+						layout = LG::layoutGeneration(floorNumber);
+						wallsCheck(layout, roomPointer, walls);
+					}
 				}
 			}
 
@@ -552,6 +574,23 @@ int main()
 			clock.restart();
 			float elapsed = 0;
 			while (elapsed < 3.f)
+			{
+				elapsed = clock.getElapsedTime().asSeconds();
+			}
+			window.close();
+		}
+		if (floorNumber == 5)
+		{
+			Texture winTex;
+			LoadTexture("data/win.png", winTex);
+			Sprite win;
+			win.setTexture(winTex);
+			win.setPosition(GC::LowerBounds.x, GC::LowerBounds.y);
+			window.draw(win);
+			window.display();
+			clock.restart();
+			float elapsed = 0;
+			while (elapsed < 5.f)
 			{
 				elapsed = clock.getElapsedTime().asSeconds();
 			}
