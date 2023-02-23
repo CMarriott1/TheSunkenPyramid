@@ -1,4 +1,5 @@
 #include "SFML/Graphics.hpp"
+#include "SFML/Audio.hpp"
 #include "layout.h"
 #include "constants.h"
 #include <assert.h>
@@ -293,6 +294,12 @@ int main()
 	bool loopbreak = false;
 	int score = 250;
 	std::vector<bool>tabheld(2, false);
+
+	Music music;
+	if (!music.openFromFile("data/egypt-music.ogg"))
+		return -1; // error
+	music.play();
+
 	//Main Menu
 	while (!loopbreak)
 	{
@@ -715,7 +722,7 @@ int main()
 				Text generalText;
 				generalText.setFont(font);
 				generalText.setCharacterSize(48);
-				generalText.setString("Type in a 3\nletter name");
+				generalText.setString("Type and enter a 3 letter \n name to save your score");
 				generalText.setPosition(24, 24);
 
 				Text typeText;
