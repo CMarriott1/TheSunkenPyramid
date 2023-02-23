@@ -10,6 +10,7 @@
 #include "enemyprojectile.h"
 #include "jewel.h"
 #include "leaderboard.h"
+#include "main.h"
 
  
 using namespace sf;
@@ -34,10 +35,14 @@ void wallsCheck(std::vector<std::vector<int>>&layout, std::vector<int>&roomPoint
 	if (layout[roomPointer[0]][roomPointer[1] - 1] == 0) walls[3] = true;
 }
 
-void newRoom(std::vector<std::vector<int>>& layout, std::vector<int>& roomPointer, std::vector<bool>& walls, std::vector<PlayerProjectile>& projectiles, std::vector<EnemyProjectile>& enemyProjectiles , int playerPosition, int floorNumber, std::vector<Bat>& bats, std::vector<Mummy>& mummies, int& roomType, int& enemyCounter)
+void newRoom(std::vector<std::vector<int>>& layout, std::vector<std::vector<int>>& map, std::vector<int>& roomPointer, std::vector<bool>& walls, std::vector<PlayerProjectile>& projectiles, std::vector<EnemyProjectile>& enemyProjectiles , int playerPosition, int floorNumber, std::vector<Bat>& bats, std::vector<Mummy>& mummies, int& roomType, int& enemyCounter)
 {
 	//Wall update
 	wallsCheck(layout, roomPointer, walls);
+
+	//Map update
+	map[roomPointer[0]][ roomPointer[1]] = 3;
+	LG::mapRoomCheck(roomPointer, map, layout);
 
 	//Projectile Clearing
 	for (size_t i = 0; i < projectiles.size(); ++i)
@@ -63,6 +68,7 @@ void newRoom(std::vector<std::vector<int>>& layout, std::vector<int>& roomPointe
 		walls = { true, true, true, true };
 		enemyCounter = floorNumber;
 	}
+
 }
 
 bool collision(const Vector2f& pos1, const Vector2f& pos2, int radii)
@@ -251,6 +257,17 @@ int main()
 	leaderboardText.setFont(font);
 	floorText.setCharacterSize(24);
 
+	RectangleShape MapBackground(Vector2f(416.f, 416.f));
+	MapBackground.setFillColor(Color(0, 0, 0));
+	MapBackground.setOrigin(416.f / 2, 416.f / 2);
+	MapBackground.setPosition(GC::ScreenCentre.x, GC::ScreenCentre.y);
+	RectangleShape Tile3(Vector2f(32.f, 32.f));
+	Tile3.setFillColor(Color(255, 255, 255));
+	RectangleShape Tile2(Vector2f(32.f, 32.f));
+	Tile2.setFillColor(Color(159, 159, 159));
+	RectangleShape Tile1(Vector2f(32.f, 32.f));
+	Tile1.setFillColor(Color(63, 63, 63));
+
 	Leaderboard leaderboard;
 	leaderboard.init();
 	leaderboard.create();
@@ -260,9 +277,13 @@ int main()
 	Clock clock;
 
 	std::vector<std::vector<int>>layout(LG::layoutGeneration());
+	std::vector<std::vector<int>>map(13, { 0,0,0,0,0,0,0,0,0,0,0,0,0 });
 	std::vector<int>roomPointer{GC::FloorCentre.x, GC::FloorCentre.y};
 	std::vector<bool>walls{false, false, false, false};
 	wallsCheck(layout, roomPointer, walls);
+
+	map[6][6] = 3;
+	LG::mapRoomCheck(roomPointer, map, layout);
 
 	Event event;
 
@@ -271,7 +292,7 @@ int main()
 	std::vector<bool>items(4, false);
 	bool loopbreak = false;
 	int score = 250;
-	
+	std::vector<bool>tabheld(2, false);
 	//Main Menu
 	while (!loopbreak)
 	{
@@ -343,12 +364,13 @@ int main()
 		//Gane loop
 		while (!loopbreak)
 		{
+			tabheld[0] = tabheld[1];
+			tabheld[1] = false;
 			// Process events
 			while (window.pollEvent(event))
 			{
 				// Close window: exit
 				if (event.type == Event::Closed) window.close();
-
 				if (event.type == Event::KeyPressed)
 				{
 					if (event.key.code == Keyboard::Escape) {
@@ -356,7 +378,7 @@ int main()
 					}
 				}
 			}
-
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab)) tabheld[1] = true;
 			window.clear(darkStone);
 
 			float elapsed = clock.getElapsedTime().asSeconds();
@@ -391,7 +413,7 @@ int main()
 				{
 					player.spr.setPosition(player.spr.getPosition().x, GC::WindowSize.y - (GC::WallSize + GC::CharRadius));
 					roomPointer[0] -= 1;
-					newRoom(layout, roomPointer, walls, playerProjectiles, enemyProjectiles, GC::Down, floorNumber, bats, mummies, roomType, enemyCounter);
+					newRoom(layout, map, roomPointer, walls, playerProjectiles, enemyProjectiles, GC::Down, floorNumber, bats, mummies, roomType, enemyCounter);
 				}
 				else player.spr.setPosition(player.spr.getPosition().x, GC::LowerBounds.y + (GC::WallSize + GC::CharRadius));
 			}
@@ -400,7 +422,7 @@ int main()
 				{
 					player.spr.setPosition(GC::LowerBounds.x + (GC::WallSize + GC::CharRadius), player.spr.getPosition().y);
 					roomPointer[1] += 1;
-					newRoom(layout, roomPointer, walls, playerProjectiles, enemyProjectiles, GC::Left, floorNumber, bats, mummies, roomType, enemyCounter);
+					newRoom(layout, map, roomPointer, walls, playerProjectiles, enemyProjectiles, GC::Left, floorNumber, bats, mummies, roomType, enemyCounter);
 				}
 				else player.spr.setPosition(GC::WindowSize.x - (GC::WallSize + GC::CharRadius), player.spr.getPosition().y);
 			}
@@ -409,7 +431,7 @@ int main()
 				{
 					player.spr.setPosition(player.spr.getPosition().x, GC::LowerBounds.y + (GC::WallSize + GC::CharRadius));
 					roomPointer[0] += 1;
-					newRoom(layout, roomPointer, walls, playerProjectiles, enemyProjectiles, GC::Up, floorNumber, bats, mummies, roomType, enemyCounter);
+					newRoom(layout, map, roomPointer, walls, playerProjectiles, enemyProjectiles, GC::Up, floorNumber, bats, mummies, roomType, enemyCounter);
 				}
 				else player.spr.setPosition(player.spr.getPosition().x, GC::WindowSize.y - (GC::WallSize + GC::CharRadius));
 			}
@@ -418,7 +440,7 @@ int main()
 				{
 					player.spr.setPosition(GC::WindowSize.x - (GC::WallSize + GC::CharRadius), player.spr.getPosition().y);
 					roomPointer[1] -= 1;
-					newRoom(layout, roomPointer, walls, playerProjectiles, enemyProjectiles, GC::Right, floorNumber, bats, mummies, roomType, enemyCounter);
+					newRoom(layout, map, roomPointer, walls, playerProjectiles, enemyProjectiles, GC::Right, floorNumber, bats, mummies, roomType, enemyCounter);
 				}
 				else player.spr.setPosition(GC::LowerBounds.x + (GC::WallSize + GC::CharRadius), player.spr.getPosition().y);
 			}
@@ -520,6 +542,7 @@ int main()
 			if (secondtimer < 0)
 			{
 				score -= 1;
+				if (score < 0) score = 0;
 				secondtimer = 1;
 				scoreText.setString(std::to_string(score));
 			}
@@ -600,6 +623,32 @@ int main()
 				window.draw(wall);
 			}
 
+			//Map Rendering
+			if (tabheld[0] && tabheld[1])
+			{
+				window.draw(MapBackground);
+
+				for (int i = 0; i < map.size(); i++) {
+					for (int j = 0; j < map[i].size(); j++)
+						if (map[j][i] == 1)
+						{
+							Tile1.setPosition(48 + i * 32,GC::LowerBounds.y + 48 +  j * 32);
+							window.draw(Tile1);
+						}
+						else if (map[j][i] == 2)
+						{
+							Tile2.setPosition(48 + i * 32, GC::LowerBounds.y + 48 + j * 32);
+							window.draw(Tile2);
+						}
+						else if (map[j][i] == 3)
+						{
+							Tile3.setPosition(48 + i * 32, GC::LowerBounds.y + 48 + j * 32);
+							window.draw(Tile3);
+						}
+				}
+			}
+
+			//HUD
 			window.draw(infoRectangle);
 			for (int i = 0; i < player.maxHealth; ++i)
 			{
@@ -641,6 +690,7 @@ int main()
 		}
 		if (floorNumber == 5)
 		{
+			bool saveScore;
 			Texture winTex;
 			LoadTexture("data/win.png", winTex);
 			Sprite win;
@@ -650,9 +700,61 @@ int main()
 			window.display();
 			clock.restart();
 			float elapsed = 0;
-			while (elapsed < 5.f)
+			while (elapsed < 3.f)
 			{
 				elapsed = clock.getElapsedTime().asSeconds();
+			}
+			if (scores.size() < 10)
+			{
+				saveScore = true;
+			}
+			//else if score bigger than least biggest
+			if (saveScore)
+			{
+				
+				Text generalText;
+				generalText.setFont(font);
+				generalText.setCharacterSize(48);
+				generalText.setString("Type in a 3\nletter name");
+				generalText.setPosition(24, 24);
+
+				Text typeText;
+				typeText.setFont(font);
+				typeText.setCharacterSize(96);
+				typeText.setPosition(24, 240);
+				sf::String playerInput;
+				
+				loopbreak = false;
+				while (!loopbreak)
+				{
+					window.clear();
+					while (window.pollEvent(event))
+					{
+						if (event.type == sf::Event::TextEntered && playerInput.getSize() < 3)
+						{
+							if (std::isprint(event.text.unicode))
+							{
+								playerInput += event.text.unicode;
+							}
+							typeText.setString(playerInput);
+						}
+						if (event.key.code == sf::Keyboard::BackSpace && playerInput.getSize() > 0)
+						{
+							playerInput.erase(playerInput.getSize()-1, 1);
+							
+						}
+						if (event.key.code == sf::Keyboard::Enter && playerInput.getSize() == 3)
+						{
+							int PK = leaderboard.insertPlayer(playerInput);
+							leaderboard.insertLeaderboard(std::to_string(score) + "', '" + std::to_string(PK));
+							loopbreak = true;
+						}
+					}
+					window.draw(generalText);
+					window.draw(typeText);
+					window.display();
+
+				}
 			}
 			window.close();
 		}

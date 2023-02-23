@@ -151,6 +151,7 @@
     <ClInclude Include="enemyprojectile.h" />
     <ClInclude Include="leaderboard.h" />
     <ClInclude Include="jewel.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="mummy.h" />
     <ClInclude Include="playerprojectile.h" />
     <ClInclude Include="player.h" />

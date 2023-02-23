@@ -14,8 +14,8 @@ struct Leaderboard
 
 	void init();
 	void create();
-	void insertPlayer(std::string&);
-	void insertLeaderboard(std::string&);
+	int insertPlayer(std::string);
+	void insertLeaderboard(std::string);
 	void remove(int);
 	std::vector<std::vector<int>> retrieveScores();
 };

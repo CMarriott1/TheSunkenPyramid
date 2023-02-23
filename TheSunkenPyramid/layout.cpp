@@ -5,7 +5,7 @@
 
 namespace LG
 {
-	void moveIndex(std::vector<int>& index, std::vector<int> directions, int direction)
+	void moveIndex(std::vector<int>& index, std::vector<int>& directions, int direction)
 	{
 		if (directions[direction] == 1) index[1] = index[1] + 1;
 		else if (directions[direction] == 2) index[0] = index[0] + 1;
@@ -17,6 +17,30 @@ namespace LG
 	{
 		if (indexValue >= 0 && indexValue < 13) return true;
 		else return false;
+	}
+
+	void mapRoomCheck(std::vector<int>& index, std::vector<std::vector<int>>& map, std::vector<std::vector<int>>& layout)
+	{
+		if (validateIndexValue(index[1] + 1)) if (layout[index[0]][index[1] + 1] > 0)
+		{
+			if (map[index[0]][index[1] + 1] == 0) map[index[0]][index[1] + 1] = 1;
+			else if (map[index[0]][index[1] + 1] == 3) map[index[0]][index[1] + 1] = 2;
+		}
+		if (validateIndexValue(index[0] + 1)) if (layout[index[0] + 1][index[1]] > 0)
+		{
+			if (map[index[0] + 1][index[1]] == 0) map[index[0] + 1][index[1]] = 1;
+			else if(map[index[0] + 1][index[1]] == 3) map[index[0] + 1][index[1]] = 2;
+		}
+		if (validateIndexValue(index[1] - 1)) if (layout[index[0]][index[1] - 1] > 0)
+		{
+			if (map[index[0]][index[1] - 1] == 0) map[index[0]][index[1] - 1] = 1;
+			else if(map[index[0]][index[1] - 1] == 3) map[index[0]][index[1] - 1] = 2;
+		}
+		if (validateIndexValue(index[0] - 1)) if (layout[index[0] - 1][index[1]] > 0)
+		{
+			if (map[index[0] - 1][index[1]] == 0) map[index[0] - 1][index[1]] = 1;
+			else if (map[index[0] - 1][index[1]] == 3) map[index[0] - 1][index[1]] = 2;
+		}
 	}
 
 	std::vector<std::vector<int>> layoutGeneration(int floorNumber = 1)

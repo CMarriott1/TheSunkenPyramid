@@ -94,12 +94,36 @@ void Leaderboard::create()
 	}
 }
 
-void Leaderboard::insertPlayer(std::string& values)
+int Leaderboard::insertPlayer(std::string name)
 {
+	sqlite3_stmt* stmt;
+	const std::string sql1 = "SELECT Name, PlayerID FROM Player";
+	sqlite3_prepare(db, sql1.c_str(), -1, &stmt, 0);
+	while (sqlite3_step(stmt) == SQLITE_ROW)
+	{
+		const unsigned char* temp = sqlite3_column_text(stmt, 0);
+		std::string strtemp(reinterpret_cast<const char*>(temp));
+		if (strtemp == name)
+		{
+			return sqlite3_column_int(stmt, 1);
+		}
+	}
+	sqlite3_finalize(stmt);
+
+	int PK = 1;
+	const std::string sql2 = "SELECT PlayerID FROM Player";
+	sqlite3_prepare(db, sql2.c_str(), -1, &stmt, 0);
+	while (sqlite3_step(stmt) == SQLITE_ROW)
+	{
+		if (sqlite3_column_int(stmt, 0) > PK) PK = sqlite3_column_int(stmt, 0);
+	}
+	++PK;
+	sqlite3_finalize(stmt);
+
 	//string 1 format "(num, 'name');"
-	const std::string sql1 = "INSERT INTO Player (PlayerID, Name) "\
-		"VALUES " + values;
-	rc = sqlite3_exec(db, sql1.c_str(), nullptr, 0, &zErrMsg);
+	const std::string sql3 = "INSERT INTO Player (PlayerID, Name) "\
+		"VALUES (" + std::to_string(PK) + ", '" + name + "');";
+	rc = sqlite3_exec(db, sql3.c_str(), nullptr, 0, &zErrMsg);
 	if (rc != SQLITE_OK) {
 		DebugPrint("SQL error: ", zErrMsg);
 		sqlite3_free(zErrMsg);
@@ -107,13 +131,43 @@ void Leaderboard::insertPlayer(std::string& values)
 	else {
 		DebugPrint("Data inserted successfully", "");
 	}
+	return PK;
 }
-void Leaderboard::insertLeaderboard(std::string& values)
+void Leaderboard::insertLeaderboard(std::string values)
 {
+	sqlite3_stmt* stmt;
+	int PK = 1;
+	const std::string sql1 = "SELECT ScoreID FROM Leaderboard";
+	sqlite3_prepare(db, sql1.c_str(), -1, &stmt, 0);
+	while (sqlite3_step(stmt) == SQLITE_ROW)
+	{
+		if (sqlite3_column_int(stmt, 0) > PK) PK = sqlite3_column_int(stmt, 0);
+	}
+	++PK;
+	sqlite3_finalize(stmt);
+
+	if (PK == 11)
+	{
+		std::vector<int>LowestValue{ -1,2000 };
+		const std::string sql2 = "SELECT ScoreID, Score FROM Leaderboard";
+		sqlite3_prepare(db, sql2.c_str(), -1, &stmt, 0);
+		while (sqlite3_step(stmt) == SQLITE_ROW)
+		{
+			if (sqlite3_column_int(stmt, 1) < LowestValue[1])
+			{
+				LowestValue[0] = sqlite3_column_int(stmt, 0);
+				LowestValue[1] = sqlite3_column_int(stmt, 1);
+			}
+		}
+		sqlite3_finalize(stmt);
+
+		Leaderboard::remove(LowestValue[0]);
+	}
+
 	//string 2 format "(num, num, num);"
-	const std::string sql2 = "INSERT INTO Leaderboard (ScoreID, Score, PlayerID) "\
-		"VALUES " + values;
-	rc = sqlite3_exec(db, sql2.c_str(), nullptr, 0, &zErrMsg);
+	const std::string sql3 = "INSERT INTO Leaderboard (ScoreID, Score, PlayerID) "\
+		"VALUES ('" + std::to_string(PK) + "', '" + values +"');";
+	rc = sqlite3_exec(db, sql3.c_str(), nullptr, 0, &zErrMsg);
 	if (rc != SQLITE_OK) {
 		DebugPrint("SQL error: ", zErrMsg);
 		sqlite3_free(zErrMsg);
