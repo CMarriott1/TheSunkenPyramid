@@ -151,13 +151,6 @@ namespace LG
 		//Last uncleared room is replaced with the item room
 		layout[index[0]][index[1]] = 3;
 
-		//lil dev cheat ehehe ehehe :)) devious activities down here for me and me only
-		for (int i = 0; i < layout.size(); i++) {
-			for (int j = 0; j < layout[i].size(); j++)
-				std::cout << layout[i][j] << " ";
-			std::cout << std::endl;
-		}
-
 		return layout;
 	}
 }
