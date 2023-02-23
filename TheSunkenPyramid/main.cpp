@@ -218,14 +218,16 @@ int main()
 	infoRectangle.setFillColor(Color(128, 128, 128));
 
 	RectangleShape wallbase(Vector2f(496.f, 496.f));
-	wallbase.setOutlineColor(Color(229, 229, 139));
+	Color lightStone = Color(229, 229, 139, 255);
+	wallbase.setOutlineColor(lightStone);
 	wallbase.setOutlineThickness(8);
 	wallbase.setFillColor(Color::Transparent);
 	wallbase.setOrigin(248.f, 248.f);
 	wallbase.setPosition(GC::ScreenCentre.x, GC::ScreenCentre.y);
 	
 	RectangleShape wall(Vector2f(128.f, 8.f));
-	wall.setFillColor(Color(160, 126, 32));
+	Color darkStone = Color(160, 126, 32, 255);
+	wall.setFillColor(darkStone);
 	wall.setOrigin(64.f, 256.f);
 	wall.setPosition(GC::ScreenCentre.x, GC::ScreenCentre.y);
 	wall.setRotation(90);
@@ -301,7 +303,7 @@ int main()
 				}
 			}
 
-			window.clear(Color(160, 126, 32));
+			window.clear(darkStone);
 
 			float elapsed = clock.getElapsedTime().asSeconds();
 			clock.restart();
@@ -498,6 +500,10 @@ int main()
 					}
 					else
 					{
+						darkStone -= Color(8, 8, 8, 0);
+						lightStone -= Color(8, 8, 8, 0);
+						wall.setFillColor(darkStone);
+						wall.setOutlineColor(lightStone);
 						floorText.setString("Floor: " + std::to_string(floorNumber));
 						scoreText.setString(std::to_string(score));
 						layout = LG::layoutGeneration(floorNumber);
