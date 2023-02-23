@@ -1,40 +1,42 @@
 ﻿  main.cpp
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(57,24): warning C4018: '<': signed/unsigned mismatch
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(84,20): warning C4018: '<': signed/unsigned mismatch
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(84,72): warning C4018: '<': signed/unsigned mismatch
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(124,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(184,65): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(184,40): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(226,59): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(226,39): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(232,55): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(232,35): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(329,179): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(330,120): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(331,148): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(332,122): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(338,74): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(342,79): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(347,47): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(351,50): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(356,75): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(360,78): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(365,46): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(369,51): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(494,65): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(494,45): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(552,44): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(58,24): warning C4018: '<': signed/unsigned mismatch
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(85,20): warning C4018: '<': signed/unsigned mismatch
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(85,72): warning C4018: '<': signed/unsigned mismatch
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(125,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(186,65): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(186,40): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(228,59): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(228,39): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(234,55): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(234,35): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(291,25): warning C4018: '<': signed/unsigned mismatch
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(294,43): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(383,179): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(384,120): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(385,148): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(386,122): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(392,74): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(396,79): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(401,47): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(405,50): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(410,75): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(414,78): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(419,46): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(423,51): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(548,65): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(548,45): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(606,44): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(556,36): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(610,36): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(577,59): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(577,40): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(594,54): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
-C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(594,35): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(631,59): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(631,40): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(648,54): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\TheSunkenPyramid\main.cpp(648,35): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
   TheSunkenPyramid.vcxproj -> C:\Pseudo-Drive\Uni Documents\code\SFML\TheSunkenPyramid\Debug\TheSunkenPyramid.exe

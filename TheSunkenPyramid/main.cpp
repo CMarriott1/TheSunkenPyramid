@@ -9,6 +9,7 @@
 #include "mummy.h"
 #include "enemyprojectile.h"
 #include "jewel.h"
+#include "leaderboard.h"
 
  
 using namespace sf;
@@ -131,6 +132,7 @@ int main()
 
 	window.setKeyRepeatEnabled(false);
 	
+	int menuMode = 0;
 	//Menu Sprites
 	Texture mainMenuTex;
 	LoadTexture("data/mainmenu.png", mainMenuTex);
@@ -141,7 +143,7 @@ int main()
 	LoadTexture("data/menuselect.png", menuSelectTex);
 	Sprite menuSelect;
 	menuSelect.setTexture(menuSelectTex);
-	menuSelect.setPosition(154, 401);
+	menuSelect.setPosition(154, 305);
 
 	//Game Sprites
 	Texture playerTex;
@@ -245,6 +247,14 @@ int main()
 	floorText.setString("Floor: 1");
 	floorText.setPosition(112, 88);
 	floorText.setFillColor(Color(127, 255, 255));
+	Text leaderboardText;
+	leaderboardText.setFont(font);
+	floorText.setCharacterSize(24);
+
+	Leaderboard leaderboard;
+	leaderboard.init();
+	leaderboard.create();
+	std::vector<std::vector<int>> scores = leaderboard.retrieveScores();
 
 	//More variable initialisation
 	Clock clock;
@@ -272,9 +282,53 @@ int main()
 			if (event.type == Event::KeyPressed)
 			{
 				if (event.key.code == Keyboard::Escape) window.close();
-				if (event.key.code == Keyboard::Enter) loopbreak = true;
-				if (event.key.code == Keyboard::Up || event.key.code == Keyboard::W) menuSelect.setPosition(154, 305);
-				else if (event.key.code == Keyboard::Down || event.key.code == Keyboard::S) menuSelect.setPosition(154, 401);
+				if (event.key.code == Keyboard::Enter)
+				{
+					if (menuMode == 0) loopbreak = true;
+					else
+					{
+						window.clear();
+						for (int i = 0; i < scores.size(); ++i)
+						{
+							leaderboardText.setString(leaderboard.PlayerName[scores[scores.size() - i - 1][2] - 1] + "   " + std::to_string(scores[scores.size() - i - 1][1]));
+							leaderboardText.setPosition(24, 24 + i * 48);
+							window.draw(leaderboardText);
+						}
+						window.display();
+						clock.restart();
+						float elapsed = 0;
+						while (elapsed < 0.1)
+						{
+							elapsed = clock.getElapsedTime().asSeconds();
+						}
+						window.pollEvent(event);
+						while (!loopbreak)
+						{
+							while (window.pollEvent(event))
+							{
+								if (event.type == Event::KeyPressed)
+								{
+									if (event.key.code == Keyboard::Enter)
+									{
+										loopbreak = true;
+										break;
+									}
+								}
+							}
+						}
+						loopbreak = false;
+					}
+				}
+				if (event.key.code == Keyboard::Up || event.key.code == Keyboard::W)
+				{
+					menuSelect.setPosition(154, 305);
+					menuMode = 0;
+				}
+				else if (event.key.code == Keyboard::Down || event.key.code == Keyboard::S)
+				{
+					menuSelect.setPosition(154, 401);
+					menuMode = 1;
+				}
 			}
 			window.clear();
 			window.draw(mainMenu);
